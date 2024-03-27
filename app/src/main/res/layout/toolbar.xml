@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:shrinkColumns="*">
+
+        <TableRow>
+            <TextView
+                android:textSize="14sp"
+                android:gravity="center"
+                android:text="Edit">
+
+            </TextView>
+
+            <TextView
+                android:textSize="14sp"
+                android:gravity="center"
+                android:text="Vue d'ensemble">
+
+            </TextView>
+
+            <TextView
+                android:textSize="14sp"
+                android:gravity="center"
+                android:text="autre">
+
+            </TextView>
+
+            <TextView
+                android:textSize="14sp"
+                android:gravity="center"
+                android:text="paramètres">
+
+            </TextView>
+
+        </TableRow>
+
+        <TableRow>
+
+            <ImageButton
+                android:onClick="edit_room"
+                android:src="@drawable/ic_launcher_foreground">
+
+            </ImageButton>
+
+            <ImageButton
+                android:onClick="scene"
+                android:src="@drawable/ic_launcher_foreground">
+
+            </ImageButton>
+
+            <ImageButton
+                android:onClick="planning"
+                android:src="@drawable/ic_launcher_foreground">
+
+            </ImageButton>
+
+            <ImageButton
+                android:onClick="display_data"
+                android:src="@drawable/ic_launcher_foreground">
+
+            </ImageButton>
+
+        </TableRow>
+
+    </TableLayout>
+
+
+</RelativeLayout>

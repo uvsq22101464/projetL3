@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TableLayout
+        android:stretchColumns="1"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+        <TableRow>
+
+            <Button
+                android:layout_gravity="center"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:onClick="accueil"
+                android:text="@string/retour"
+                android:textSize="20sp"
+                android:backgroundTint="@color/black">
+                <!--android:src="@drawable/ic_launcher_foreground">
+                        -->
+
+            </Button>
+
+            <TextView
+                android:paddingEnd="100dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:layout_gravity="center"
+                android:text="@string/menu_gestion">
+            </TextView>
+
+        </TableRow>
+
+    </TableLayout>
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:text="Pièces actives :"
+        android:textSize="25sp">
+    </TextView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableRow>
+
+                <Button
+                    android:text="@string/add"
+                    android:textSize="25sp"
+                    android:layout_width="60dp"
+                    android:layout_gravity="center"
+                    android:onClick="addRoom">
+
+                </Button>
+
+            </TableRow>
+
+        </TableLayout>
+
+
+    </ScrollView>
+
+    <include layout="@layout/toolbar"/>
+
+</LinearLayout>
+

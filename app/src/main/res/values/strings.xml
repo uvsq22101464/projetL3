@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">TestApp</string>
+    <string name="Bonjour">Bonjour tout le monde</string>
+    <string name="menu_gestion">Vue gestion</string>
+    <string name="retour">Back</string>
+    <string name="add">+</string>
+    <string-array name="roomType">
+        <item>Chambre</item>
+        <item>Cuisine</item>
+        <item>Salon</item>
+        <item>Salle de bain</item>
+        <item>Salle à manger</item>
+    </string-array>
+</resources>
