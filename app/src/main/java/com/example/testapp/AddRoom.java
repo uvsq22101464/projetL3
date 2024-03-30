@@ -12,6 +12,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class AddRoom extends AppCompatActivity {
 
     EditText roomName;
@@ -39,11 +42,15 @@ public class AddRoom extends AppCompatActivity {
     }
 
         public void createRoom(View v) {
-            Room room = new Room();
-            room.setNom(roomName.getText().toString());
-            String name = (type.getItemAtPosition(type.getSelectedItemPosition()).toString());
-            room.setType(name);
-            Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
+            String name = roomName.getText().toString();
+            String room_type = (type.getItemAtPosition(type.getSelectedItemPosition()).toString());
+            //Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
+
+            // écrire dans la base de données
+            FirebaseDatabase database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/");
+            DatabaseReference myRef = database.getReference(name + "/room_type");
+
+            myRef.setValue(room_type);
 
             Intent ia = new Intent(this, Menu.class);
             startActivity(ia);

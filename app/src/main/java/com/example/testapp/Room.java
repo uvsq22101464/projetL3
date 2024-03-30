@@ -1,5 +1,6 @@
 package com.example.testapp;
 
+//toute la classe sert à rien je crois
 public class Room {
     protected int id;
     protected String type;

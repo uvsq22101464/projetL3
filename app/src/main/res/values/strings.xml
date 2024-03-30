@@ -5,10 +5,9 @@
     <string name="retour">Back</string>
     <string name="add">+</string>
     <string-array name="roomType">
-        <item>Chambre</item>
-        <item>Cuisine</item>
-        <item>Salon</item>
-        <item>Salle de bain</item>
-        <item>Salle à manger</item>
+        <item>Bedroom</item>
+        <item>Kitchen</item>
+        <item>Living room</item>
+        <item>Bathroom</item>
     </string-array>
 </resources>
