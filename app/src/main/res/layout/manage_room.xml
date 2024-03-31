@@ -1,26 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
 
-    <TextView
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Charger les données en fct du click">
+
+        </TextView>
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reload"
+            android:onClick="reload">
+
+        </Button>
+
+    </LinearLayout>
+
+    <include
+        layout="@layout/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Charger les données en fct du click">
+        android:layout_alignParentBottom="true">
+    </include>
 
-    </TextView>
-
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Reload"
-        android:onClick="accueil">
-
-    </Button>
-
-<include layout="@layout/toolbar"/>
-
-</LinearLayout>
+</RelativeLayout>

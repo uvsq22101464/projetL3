@@ -1,55 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-    <TextView
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ajouter une pièce"
+            android:textSize="25sp"
+            android:gravity="center"
+            android:paddingBottom="30dp">
+
+        </TextView>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nom de la pièce"
+            android:id="@+id/roomName"
+            android:layout_margin="10sp">
+
+        </EditText>
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner_rooms"
+            android:layout_margin="10sp">
+
+        </Spinner>
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner_captors"
+            android:layout_margin="10sp">
+
+        </Spinner>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Valider"
+            android:textSize="25sp"
+            android:id="@+id/valider"
+            android:onClick="createRoom"
+            android:layout_margin="10sp">
+
+        </Button>
+
+    </LinearLayout>
+
+    <include
+        layout="@layout/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ajouter une pièce"
-        android:textSize="25sp"
-        android:gravity="center"
-        android:paddingBottom="30dp">
+        android:layout_alignParentBottom="true">
+    </include>
 
-    </TextView>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Nom de la pièce"
-        android:id="@+id/roomName"
-        android:layout_margin="10sp">
-
-    </EditText>
-
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinner_rooms"
-        android:layout_margin="10sp">
-
-    </Spinner>
-
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinner_captors"
-        android:layout_margin="10sp">
-
-    </Spinner>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Valider"
-        android:textSize="25sp"
-        android:id="@+id/valider"
-        android:onClick="createRoom"
-        android:layout_margin="10sp">
-
-    </Button>
-
-    <include layout="@layout/toolbar"/>
-
-</LinearLayout>
+</RelativeLayout>
