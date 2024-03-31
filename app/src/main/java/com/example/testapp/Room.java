@@ -2,25 +2,18 @@ package com.example.testapp;
 
 //toute la classe sert à rien je crois
 public class Room {
-    protected int id;
     protected String type;
     protected String nom;
     protected float temperature;
     protected boolean lumiere;
 
-    public Room(int id, String type, String nom, float temperature, boolean lumiere) {
-        this.id = id;
+    private Room() {};
+
+    public Room(String type, String nom, float temperature, boolean lumiere) {
         this.type = type;
         this.nom = nom;
         this.temperature = temperature;
         this.lumiere = lumiere;
-    }
-    public Room() {}
-    public int getId() {
-        return id;
-    }
-    public void setId(int id) {
-        this.id = id;
     }
     public String  getType() {
         return type;

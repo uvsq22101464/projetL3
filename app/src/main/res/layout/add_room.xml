@@ -18,15 +18,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Nom de la pièce"
-        android:id="@+id/roomName">
+        android:id="@+id/roomName"
+        android:layout_margin="10sp">
 
     </EditText>
 
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/spinner">
+        android:id="@+id/spinner_rooms"
+        android:layout_margin="10sp">
 
+    </Spinner>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner_captors"
+        android:layout_margin="10sp">
 
     </Spinner>
 
@@ -36,7 +45,8 @@
         android:text="Valider"
         android:textSize="25sp"
         android:id="@+id/valider"
-        android:onClick="createRoom">
+        android:onClick="createRoom"
+        android:layout_margin="10sp">
 
     </Button>
 
