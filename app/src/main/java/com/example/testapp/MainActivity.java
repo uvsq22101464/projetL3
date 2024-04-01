@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,9 +41,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.accueil);
         DatabaseReference database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
-        // on cherche l'id de notre layout
-        table_text = (TableRow) findViewById(R.id.table_bedroom_text);
-        table_button = (TableRow) findViewById(R.id.table_bedroom_button);
+        String[] listRoom = {"Bedroom", "Living_room", "Kitchen", "Bathroom", "Other"};
         // on cherche le noeud à ajouter
         database.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -51,41 +50,66 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("firebase", "Error getting data", task.getException());
                 }
                 else {
-                    try {
-                        JSONObject data = new JSONObject(String.valueOf(task.getResult().getValue()));
-                        JSONObject bedroomData = data.getJSONObject("Bedroom");
-                        Iterator<String> bedroomNames = bedroomData.keys();
-                        // faire en sorte de d'abord récup toutes les données qu'on stock dans un tableau puis on itère dans ce tableau pour crée les bouttons
-                        while(bedroomNames.hasNext()) {
-                            String name = bedroomNames.next();
-                            Log.d("firebase", name);
-                            // on crée le textView et le bouton et on leur donne ce qu'ils contiennent
-                            TextView txt = new TextView(context);
-                            Button button = new Button(context);
-                            txt.setText(name);
-                            txt.setGravity(Gravity.CENTER);
-                            button.setText(name);
-                            button.setGravity(Gravity.CENTER);
-                            // on def le click du bouton
-                            button.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent ia = new Intent(MainActivity.this, Manage_room.class);
-                                    startActivity(ia);
-                                }
-                            });
-                            // on setup des paramètres pour les textes et les boutons
-                            TableRow.LayoutParams parameter = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT);
-                            txt.setLayoutParams(parameter);
-                            button.setLayoutParams(parameter);
+                    for (String roomType : listRoom) {
+                        try {
+                            JSONObject data = new JSONObject(String.valueOf(task.getResult().getValue()));
+                            JSONObject roomData = data.getJSONObject(roomType);
+                            Iterator<String> roomNames = roomData.keys();
+                            // faire en sorte de d'abord récup toutes les données qu'on stock dans un tableau puis on itère dans ce tableau pour crée les bouttons
+                            while(roomNames.hasNext()) {
+                                String name = roomNames.next();
+                                Log.d("firebase", name);
+                                // on crée le textView et le bouton et on leur donne ce qu'ils contiennent
+                                TextView txt = new TextView(context);
+                                Button button = new Button(context);
+                                txt.setText(name);
+                                txt.setGravity(Gravity.CENTER);
+                                button.setText(name);
+                                button.setGravity(Gravity.CENTER);
+                                // on def le click du bouton
+                                button.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent ia = new Intent(MainActivity.this, Manage_room.class);
+                                        startActivity(ia);
+                                    }
+                                });
+                                // on setup des paramètres pour les textes et les boutons
+                                TableRow.LayoutParams parameter = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT);
+                                txt.setLayoutParams(parameter);
+                                button.setLayoutParams(parameter);
 
-                            // on ajoute dans la table parente
-                            table_text.addView(txt, parameter);
-                            table_button.addView(button, parameter);
+                                // on ajoute dans la table parente et on cherche la bonne table
+                                switch (roomType) {
+                                    case "Bedroom":
+                                        table_text = (TableRow) findViewById(R.id.table_bedroom_text);
+                                        table_button = (TableRow) findViewById(R.id.table_bedroom_button);
+                                        break;
+                                    case "Living_room":
+                                        table_text = (TableRow) findViewById(R.id.table_living_room_text);
+                                        table_button = (TableRow) findViewById(R.id.table_living_room_button);
+                                        break;
+                                    case "Kitchen":
+                                        table_text = (TableRow) findViewById(R.id.table_kitchen_text);
+                                        table_button = (TableRow) findViewById(R.id.table_kitchen_button);
+                                        break;
+                                    case "Bathroom":
+                                        table_text = (TableRow) findViewById(R.id.table_bathroom_text);
+                                        table_button = (TableRow) findViewById(R.id.table_bathroom_button);
+                                        break;
+                                    default:
+                                        table_text = (TableRow) findViewById(R.id.table_other_text);
+                                        table_button = (TableRow) findViewById(R.id.table_other_button);
+                                        break;
+                                }
+                                table_text.addView(txt, parameter);
+                                table_button.addView(button, parameter);
+                            }
+                        }catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    }catch (JSONException e) {
-                        e.printStackTrace();
                     }
+
                 }
             }
         });

@@ -21,16 +21,21 @@
             android:background="@color/white">
 
         </TextView>
-
+        <!-- Layout pour Bedroom -->
         <HorizontalScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="25dp">
+            android:layout_marginBottom="25dp">
 
             <TableLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:shrinkColumns="*">
+
+                <TextView
+                    android:text="Chambres :">
+
+                </TextView>
 
                 <TableRow
                     android:id="@+id/table_bedroom_text"
@@ -41,6 +46,142 @@
 
                 <TableRow
                     android:id="@+id/table_bedroom_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                </TableRow>
+
+            </TableLayout>
+
+        </HorizontalScrollView>
+
+        <!-- Layout pour Living_room -->
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp">
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:shrinkColumns="*">
+
+                <TextView
+                    android:text="Salons :">
+
+                </TextView>
+
+                <TableRow
+                    android:id="@+id/table_living_room_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/table_living_room_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                </TableRow>
+
+            </TableLayout>
+
+        </HorizontalScrollView>
+
+        <!-- Layout pour Kitchen -->
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp">
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:shrinkColumns="*">
+
+                <TextView
+                    android:text="Cuisines :">
+
+                </TextView>
+
+                <TableRow
+                    android:id="@+id/table_kitchen_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/table_kitchen_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                </TableRow>
+
+            </TableLayout>
+
+        </HorizontalScrollView>
+
+        <!-- Layout pour Bathroom -->
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp">
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:shrinkColumns="*">
+
+                <TextView
+                    android:text="Salles de bains :">
+
+                </TextView>
+
+                <TableRow
+                    android:id="@+id/table_bathroom_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/table_bathroom_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                </TableRow>
+
+            </TableLayout>
+
+        </HorizontalScrollView>
+
+        <!-- Layout pour Other -->
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp">
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:shrinkColumns="*">
+
+                <TextView
+                    android:text="Autre catégorie :">
+
+                </TextView>
+
+                <TableRow
+                    android:id="@+id/table_other_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/table_other_button"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent">
 

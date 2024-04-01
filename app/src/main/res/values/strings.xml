@@ -7,8 +7,9 @@
     <string-array name="roomType">
         <item>Bedroom</item>
         <item>Kitchen</item>
-        <item>Living room</item>
+        <item>Living_room</item>
         <item>Bathroom</item>
+        <item>Other</item>
     </string-array>
     <string-array name="captors">
         <item>Light</item>
