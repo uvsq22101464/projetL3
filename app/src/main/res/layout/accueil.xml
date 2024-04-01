@@ -22,6 +22,34 @@
 
         </TextView>
 
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="25dp">
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:shrinkColumns="*">
+
+                <TableRow
+                    android:id="@+id/table_bedroom_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/table_bedroom_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                </TableRow>
+
+            </TableLayout>
+
+        </HorizontalScrollView>
+
     </LinearLayout>
 
     <include
