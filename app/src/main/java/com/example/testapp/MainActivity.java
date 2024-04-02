@@ -28,6 +28,7 @@ import org.json.JSONObject;
 
 import java.util.Iterator;
 
+
 public class MainActivity extends AppCompatActivity {
 
     Context context = this;
@@ -50,12 +51,14 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("firebase", "Error getting data", task.getException());
                 }
                 else {
-                    for (String roomType : listRoom) {
                         try {
-                            JSONObject data = new JSONObject(String.valueOf(task.getResult().getValue()));
+                            Log.e("JSON data", String.valueOf(task.getResult()));
+                            JSONObject data = new JSONObject(convert(task.getResult().getValue()));
+
+                            for (String roomType : listRoom) {
                             JSONObject roomData = data.getJSONObject(roomType);
                             Iterator<String> roomNames = roomData.keys();
-                            // faire en sorte de d'abord récup toutes les données qu'on stock dans un tableau puis on itère dans ce tableau pour crée les bouttons
+
                             while(roomNames.hasNext()) {
                                 String name = roomNames.next();
                                 Log.d("firebase", name);
@@ -71,9 +74,11 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(View v) {
                                         Intent ia = new Intent(MainActivity.this, Manage_room.class);
+                                        //il faudra ajouter de put pour données les données afin de charger la page avec les donnée où on a cliquer
                                         startActivity(ia);
                                     }
                                 });
+
                                 // on setup des paramètres pour les textes et les boutons
                                 TableRow.LayoutParams parameter = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT);
                                 txt.setLayoutParams(parameter);
@@ -105,15 +110,19 @@ public class MainActivity extends AppCompatActivity {
                                 table_text.addView(txt, parameter);
                                 table_button.addView(button, parameter);
                             }
+                        }
                         }catch (JSONException e) {
                             e.printStackTrace();
-                        }
                     }
 
                 }
             }
         });
         }
+    public String convert(Object data) {
+        // fonction qui permet de convertir les données contenu dans le datasnaphot en y ajoutant des "" pour pouvoir les transformer plus tard en JSON
+        return data.toString().replaceAll("(\\b[\\w\\s]+)(?=[=:])(?=[=:])", "\"$1\"");
+    }
 
 
 
