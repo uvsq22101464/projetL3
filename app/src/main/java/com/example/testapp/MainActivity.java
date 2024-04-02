@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.accueil);
         DatabaseReference database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
         String[] listRoom = {"Bedroom", "Living_room", "Kitchen", "Bathroom", "Other"};
+        String[] listCaptor = {"Light", "Temperature"};
         // on cherche le noeud à ajouter
         database.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -74,7 +75,25 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(View v) {
                                         Intent ia = new Intent(MainActivity.this, Manage_room.class);
-                                        //il faudra ajouter de put pour données les données afin de charger la page avec les donnée où on a cliquer
+                                        try {
+                                            // on récup les données de la salle dans un JSONObject
+                                            JSONObject inRoomData =  data.getJSONObject(roomType).getJSONObject(name);
+                                            // on itère sur tous les capteurs pr&sent dans la salle
+                                            Iterator<String> inRoomCaptor = inRoomData.keys();
+                                            ia.putExtra("name", name);
+
+                                            while (inRoomCaptor.hasNext()) {
+                                                String name = inRoomCaptor.next();
+
+                                                if (inRoomData.get(name) instanceof Boolean) {
+                                                    ia.putExtra("light", (Boolean) inRoomData.get(name));
+                                                } else if (inRoomData.get(name) instanceof Integer) {
+                                                    ia.putExtra("temperature", (Integer) inRoomData.get(name));
+                                                }
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
                                         startActivity(ia);
                                     }
                                 });

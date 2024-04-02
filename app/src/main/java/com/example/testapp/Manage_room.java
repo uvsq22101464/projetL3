@@ -8,10 +8,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class Manage_room extends AppCompatActivity {
 
+    String name;
+    Integer temperature;
+    Boolean light;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manage_room);
+
+        name = getIntent().getStringExtra("name");
+        temperature = getIntent().getIntExtra("temperature", 0);
+        light = getIntent().getBooleanExtra("light", false);
+
     }
 
     public void reload(View v) {
