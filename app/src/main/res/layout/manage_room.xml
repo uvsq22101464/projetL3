@@ -13,9 +13,17 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Charger les données en fct du click">
+            android:gravity="center"
+            android:id="@+id/name">
 
         </TextView>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/table">
+
+        </TableRow>
 
 
         <Button

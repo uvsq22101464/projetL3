@@ -26,6 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         DatabaseReference database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
         String[] listRoom = {"Bedroom", "Living_room", "Kitchen", "Bathroom", "Other"};
         String[] listCaptor = {"Light", "Temperature"};
+        ArrayList<String> roomCaptor = new ArrayList<String>() {};
         // on cherche le noeud à ajouter
         database.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -84,12 +87,8 @@ public class MainActivity extends AppCompatActivity {
 
                                             while (inRoomCaptor.hasNext()) {
                                                 String name = inRoomCaptor.next();
-
-                                                if (inRoomData.get(name) instanceof Boolean) {
-                                                    ia.putExtra("light", (Boolean) inRoomData.get(name));
-                                                } else if (inRoomData.get(name) instanceof Integer) {
-                                                    ia.putExtra("temperature", (Integer) inRoomData.get(name));
-                                                }
+                                                roomCaptor.add(name);
+                                                ia.putExtra("roomCaptor", roomCaptor);
                                             }
                                         } catch (JSONException e) {
                                             e.printStackTrace();
