@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
                                             // on itère sur tous les capteurs pr&sent dans la salle
                                             Iterator<String> inRoomCaptor = inRoomData.keys();
                                             ia.putExtra("name", name);
+                                            ia.putExtra("type", roomType);
 
                                             while (inRoomCaptor.hasNext()) {
                                                 String name = inRoomCaptor.next();

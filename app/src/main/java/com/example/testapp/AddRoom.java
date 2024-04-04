@@ -69,7 +69,7 @@ public class AddRoom extends AppCompatActivity {
             // converti le type de capteur en la donnée qu'il prend
             Toast.makeText(this, captor, Toast.LENGTH_SHORT).show();
             if (captor.equals("Light")) {
-                myRef.setValue("false");
+                myRef.setValue(false);
             } else if (captor.equals("Temperature")) {
                 myRef.setValue(0.0);
             } else {
