@@ -26,9 +26,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -47,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         String[] listRoom = {"Bedroom", "Living_room", "Kitchen", "Bathroom", "Other"};
         String[] listCaptor = {"Light", "Temperature"};
         ArrayList<String> roomCaptor = new ArrayList<String>() {};
+        ArrayList<Object> roomCaptorData = new ArrayList<Object>() {};
         // on cherche le noeud à ajouter
         database.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -89,8 +93,11 @@ public class MainActivity extends AppCompatActivity {
                                             while (inRoomCaptor.hasNext()) {
                                                 String name = inRoomCaptor.next();
                                                 roomCaptor.add(name);
-                                                ia.putExtra("roomCaptor", roomCaptor);
+                                                roomCaptorData.add(inRoomData.get(name));
                                             }
+                                            ia.putExtra("roomCaptor", roomCaptor);
+                                            ia.putExtra("roomCaptorData", (Serializable) roomCaptorData);
+                                            Log.d("Value sent to manage", String.valueOf(roomCaptorData));
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }

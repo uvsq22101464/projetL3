@@ -17,12 +17,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Manage_room extends AppCompatActivity {
 
@@ -30,6 +34,8 @@ public class Manage_room extends AppCompatActivity {
     String name;
     String roomType;
     ArrayList<String> roomCaptor;
+    ArrayList<?> roomCaptorData;
+    DatabaseReference database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,60 +43,90 @@ public class Manage_room extends AppCompatActivity {
         setContentView(R.layout.manage_room);
 
         name = getIntent().getStringExtra("name");
-        roomCaptor = getIntent().getStringArrayListExtra("roomCaptor");
         roomType = getIntent().getStringExtra("type");
-        TableRow.LayoutParams parameter = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT);
-        TableLayout table = (TableLayout) findViewById(R.id.table);
+        roomCaptor = getIntent().getStringArrayListExtra("roomCaptor");
+        roomCaptorData = (ArrayList<?>) getIntent().getSerializableExtra("roomCaptorData");
+        database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference(roomType + "/" + name);
+        HashMap<String, Object> captorData = new HashMap<String, Object>();
+        for (int i = 0; i < roomCaptor.size(); i++) {
+            captorData.put(roomCaptor.get(i), roomCaptorData.get(i));
+        }
 
-        for (String captor : roomCaptor) {
+        TableLayout table = (TableLayout) findViewById(R.id.table);
+        initialize(captorData, table);
+
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (String captor : roomCaptor) {
+                    Object value = snapshot.child(captor).getValue();
+                    switch (captor) {
+                        case "Light":
+                            ToggleButton button = findViewById(R.id.lightToggle);
+                            button.setChecked((Boolean) value);
+                            break;
+                        case "Temperature":
+                            TextView textTemperature = findViewById(R.id.temperatureValue);
+                            textTemperature.setText((String) value.toString());
+                            break;
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("error", "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+
+    private void initialize(HashMap<String, Object> map, TableLayout table) {
+        // met les données de base dans la table
+        TableRow.LayoutParams parameter = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT);
+        for (String keys : map.keySet()) {
             TextView text = new TextView(context);
-            text.setText(captor);
+            text.setText(keys);
             text.setLayoutParams(parameter);
             TableRow row = new TableRow(context);
             row.addView(text, parameter);
             table.addView(row, parameter);
-            Log.d("Ajout", captor);
-            if (captor.equals("Light")) {
-                ToggleButton button = getToggleButton(captor);
-                table.addView(button);
+            switch (keys) {
+                case "Light":
+                    ToggleButton button = new ToggleButton(context);
+                    button.setId(R.id.lightToggle);
+                    button.setChecked((Boolean) map.get(keys));
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DatabaseReference database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference(roomType + "/" + name + "/Light");
+                            database.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    if (!task.isSuccessful()) {
+                                        Log.e("Toggle Button", "error retreiving data", task.getException());
+                                    }
+                                    Object data = task.getResult().getValue();
+                                    if (data instanceof Boolean) {
+                                        boolean value = (Boolean) data;
+                                        database.setValue(!value);
+                                    } else {
+                                        Log.e("Toggle Button", "unexpected value type : " + data.getClass().getSimpleName());
+                                    }
+                                }
+                            });
 
+                        }
+                    });
+                    table.addView(button);
+                    break;
+                case "Temperature":
+                    TextView temp = new TextView(context);
+                    temp.setId(R.id.temperatureValue);
+                    temp.setText((String) map.get(keys).toString());
+                    table.addView(temp);
+                    break;
             }
-            // de plus il faut ajouter la récup de données en temps réel
         }
-
-        TextView page_name = (TextView) findViewById(R.id.name);
-        page_name.setText(name);
-
-
-
-    }
-
-    @NonNull
-    private ToggleButton getToggleButton(String captor) {
-        ToggleButton button = new ToggleButton(context);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatabaseReference database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference(roomType + "/" + name + "/" + captor);
-                database.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataSnapshot> task) {
-                        if (!task.isSuccessful()) {
-                            Log.e("Toggle Button", "error retreiving data", task.getException());
-                        }
-                        Object data = task.getResult().getValue();
-                        if (data instanceof Boolean) {
-                            boolean value = (Boolean) data;
-                            database.setValue(!value);
-                        } else {
-                            Log.e("Toggle Button", "unexpected value type : " + data.getClass().getSimpleName());
-                        }
-                    }
-                });
-
-            }
-        });
-        return button;
     }
 
     public void reload(View v) {

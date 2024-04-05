@@ -15,4 +15,8 @@
         <item>Light</item>
         <item>Temperature</item>
     </string-array>
+
+    <item name="lightToggle" type="id"/>
+    <item name="temperatureValue" type="id"/>
+
 </resources>
