@@ -4,6 +4,11 @@
     <string name="menu_gestion">Vue gestion</string>
     <string name="retour">Back</string>
     <string name="add">+</string>
+    <string name="add_room_edit">Nom de la pièce</string>
+    <string name="add_room_title">Ajouter une pièce</string>
+    <string name="validate">Valider</string>
+    <string name="add_room_plus">Ajouter un capteur</string>
+
     <string-array name="roomType">
         <item>Bedroom</item>
         <item>Kitchen</item>
@@ -11,7 +16,9 @@
         <item>Bathroom</item>
         <item>Other</item>
     </string-array>
+
     <string-array name="captors">
+        <item>-----</item>
         <item>Light</item>
         <item>Temperature</item>
     </string-array>

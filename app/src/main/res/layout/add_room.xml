@@ -12,7 +12,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ajouter une pièce"
+            android:text="@string/add_room_title"
             android:textSize="25sp"
             android:gravity="center"
             android:paddingBottom="30dp">
@@ -22,34 +22,42 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nom de la pièce"
+            android:hint="@string/add_room_edit"
             android:id="@+id/roomName"
             android:layout_margin="10sp">
 
         </EditText>
 
-        <Spinner
+        <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/spinner_rooms"
-            android:layout_margin="10sp">
+            android:id="@+id/add_room_table">
 
-        </Spinner>
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_rooms"
+                android:layout_margin="10sp">
 
-        <Spinner
-            android:layout_width="match_parent"
+            </Spinner>
+
+        </TableLayout>
+
+        <Button
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/spinner_captors"
-            android:layout_margin="10sp">
+            android:text="@string/add_room_plus"
+            android:layout_gravity="right"
+            android:onClick="addCaptor">
 
-        </Spinner>
+        </Button>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Valider"
+            android:text="@string/validate"
             android:textSize="25sp"
-            android:id="@+id/valider"
+            android:id="@+id/validate"
             android:onClick="createRoom"
             android:layout_margin="10sp">
 
