@@ -4,20 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
+    <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/tablePlanning">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Gérer les horaires de chauffages et autre je sais pas"
+            android:text="Gérer les plannings"
+            android:gravity="center"
             android:textSize="22sp">
 
         </TextView>
 
-    </LinearLayout>
+    </TableLayout>
 
     <include
     layout="@layout/toolbar"

@@ -60,6 +60,12 @@
 
         </activity>
 
+        <activity android:name=".configPlanning"
+            android:exported="true"
+            android:screenOrientation="portrait">
+
+        </activity>
+
     </application>
 
 </manifest>

@@ -60,6 +60,8 @@ public class AddRoom extends AppCompatActivity {
                     myRef.setValue(false);
                 } else if (captor.equals("Temperature")) {
                     myRef.setValue(0.0);
+                } else if (captor.equals("Volets")) {
+                    myRef.setValue(false);
                 }
             }
             Intent ia = new Intent(this, Menu.class);

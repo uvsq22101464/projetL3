@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         }
-    public String convert(Object data) {
+    public static String convert(Object data) {
         // fonction qui permet de convertir les données contenu dans le datasnaphot en y ajoutant des "" pour pouvoir les transformer plus tard en JSON
         return data.toString().replaceAll("(\\b[\\w\\s]+)(?=[=:])(?=[=:])", "\"$1\"");
     }
