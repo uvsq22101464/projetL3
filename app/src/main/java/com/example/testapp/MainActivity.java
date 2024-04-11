@@ -41,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
     TableRow table_text;
     TableRow table_button;
 
+    ArrayList<String> listRoomNames = new ArrayList<String>();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.accueil);
         DatabaseReference database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
         String[] listRoom = {"Bedroom", "Living_room", "Kitchen", "Bathroom", "Other"};
-        String[] listCaptor = {"Light", "Temperature"};
+        String[] listCaptor = {"Light", "Temperature", "Volets"};
         ArrayList<String> roomCaptor = new ArrayList<String>() {};
         ArrayList<Object> roomCaptorData = new ArrayList<Object>() {};
         // on cherche le noeud à ajouter
@@ -69,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
                             while(roomNames.hasNext()) {
                                 String name = roomNames.next();
+                                listRoomNames.add(name);
                                 Log.d("firebase", name);
                                 // on crée le textView et le bouton et on leur donne ce qu'ils contiennent
                                 TextView txt = new TextView(context);
@@ -165,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void planning(View v) {
         Intent ia = new Intent(this, Planning.class);
+        ia.putExtra("roomNames", listRoomNames);
         startActivity(ia);
     }
 

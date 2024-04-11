@@ -62,12 +62,16 @@ public class Manage_room extends AppCompatActivity {
                     Object value = snapshot.child(captor).getValue();
                     switch (captor) {
                         case "Light":
-                            ToggleButton button = findViewById(R.id.lightToggle);
-                            button.setChecked((Boolean) value);
+                            ToggleButton buttonL = findViewById(R.id.lightToggle);
+                            buttonL.setChecked((Boolean) value);
                             break;
                         case "Temperature":
                             TextView textTemperature = findViewById(R.id.temperatureValue);
                             textTemperature.setText((String) value.toString());
+                            break;
+                        case "Volets":
+                            ToggleButton buttonV = findViewById(R.id.voletValue);
+                            buttonV.setChecked((Boolean) value);
                             break;
                     }
                 }
@@ -92,10 +96,10 @@ public class Manage_room extends AppCompatActivity {
             table.addView(row, parameter);
             switch (keys) {
                 case "Light":
-                    ToggleButton button = new ToggleButton(context);
-                    button.setId(R.id.lightToggle);
-                    button.setChecked((Boolean) map.get(keys));
-                    button.setOnClickListener(new View.OnClickListener() {
+                    ToggleButton buttonL = new ToggleButton(context);
+                    buttonL.setId(R.id.lightToggle);
+                    buttonL.setChecked((Boolean) map.get(keys));
+                    buttonL.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             DatabaseReference database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference(roomType + "/" + name + "/Light");
@@ -103,7 +107,7 @@ public class Manage_room extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
                                     if (!task.isSuccessful()) {
-                                        Log.e("Toggle Button", "error retreiving data", task.getException());
+                                        Log.e("Toggle Button", "error retrieving data", task.getException());
                                     }
                                     Object data = task.getResult().getValue();
                                     if (data instanceof Boolean) {
@@ -117,13 +121,41 @@ public class Manage_room extends AppCompatActivity {
 
                         }
                     });
-                    table.addView(button);
+                    table.addView(buttonL);
                     break;
                 case "Temperature":
                     TextView temp = new TextView(context);
                     temp.setId(R.id.temperatureValue);
                     temp.setText((String) map.get(keys).toString());
                     table.addView(temp);
+                    break;
+                case "Volets":
+                    ToggleButton buttonV = new ToggleButton(context);
+                    buttonV.setId(R.id.voletValue);
+                    buttonV.setChecked((Boolean) map.get(keys));
+                    buttonV.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DatabaseReference database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference(roomType + "/" + name + "/Volets");
+                            database.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    if (!task.isSuccessful()) {
+                                        Log.e("Toggle Button", "error retrieving data Volets", task.getException());
+                                    }
+                                    Object data = task.getResult().getValue();
+                                    if (data instanceof Boolean) {
+                                        boolean value = (Boolean) data;
+                                        database.setValue(!value);
+                                    } else {
+                                        Log.e("Toggle Button", "unexpected value type : " + data.getClass().getSimpleName());
+                                    }
+                                }
+                            });
+
+                        }
+                    });
+                    table.addView(buttonV);
                     break;
             }
         }
