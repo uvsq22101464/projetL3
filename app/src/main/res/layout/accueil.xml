@@ -21,6 +21,17 @@
             android:background="@color/white">
 
         </TextView>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="@string/add"
+            android:textSize="20sp"
+            android:onClick="addRoom">
+
+        </Button>
+
         <!-- Layout pour Bedroom -->
         <HorizontalScrollView
             android:layout_width="wrap_content"

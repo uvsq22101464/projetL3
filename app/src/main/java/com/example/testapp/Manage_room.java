@@ -41,8 +41,12 @@ public class Manage_room extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manage_room);
+        Log.d("Layout selected", "manage_room");
 
         name = getIntent().getStringExtra("name");
+        TextView text = findViewById(R.id.name);
+        text.setText(name);
+        text.setTextSize(25);
         roomType = getIntent().getStringExtra("type");
         roomCaptor = getIntent().getStringArrayListExtra("roomCaptor");
         roomCaptorData = (ArrayList<?>) getIntent().getSerializableExtra("roomCaptorData");
@@ -163,6 +167,13 @@ public class Manage_room extends AppCompatActivity {
 
     public void reload(View v) {
         Intent ia = new Intent(this, MainActivity.class);
+        startActivity(ia);
+    }
+
+    public void modify(View v) {
+        Intent ia = new Intent(this, AddRoom.class);
+        ia.putExtra("name", name);
+        ia.putExtra("roomType", roomType);
         startActivity(ia);
     }
 

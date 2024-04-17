@@ -8,6 +8,8 @@
     <string name="add_room_title">Ajouter une pièce</string>
     <string name="validate">Valider</string>
     <string name="add_room_plus">Ajouter un capteur</string>
+    <string name="modify">Modifier</string>
+    <string name="add_room_minus">Enlever un capteur</string>
 
     <string-array name="roomType">
         <item>Bedroom</item>
@@ -18,7 +20,6 @@
     </string-array>
 
     <string-array name="captors">
-        <item>-----</item>
         <item>Light</item>
         <item>Temperature</item>
         <item>Volets</item>

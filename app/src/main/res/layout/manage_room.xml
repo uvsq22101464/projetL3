@@ -18,6 +18,16 @@
 
         </TextView>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/modify"
+            android:textSize="20sp"
+            android:layout_gravity="end"
+            android:onClick="modify">
+
+        </Button>
+
         <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,6 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Reload"
+            android:textSize="20sp"
             android:onClick="reload">
 
         </Button>

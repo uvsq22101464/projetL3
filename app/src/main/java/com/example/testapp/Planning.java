@@ -36,6 +36,7 @@ public class Planning extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.planning);
+        Log.d("Layout selected", "planning");
 
         roomNames = getIntent().getStringArrayListExtra("roomNames");
 

@@ -25,16 +25,24 @@ public class AddRoom extends AppCompatActivity {
     EditText roomName;
     Spinner type1;
     ArrayList<Spinner> spinners;
+    String name;
+    String roomType;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_room);
+        Log.d("Layout selected", "add_room");
 
         roomName = (EditText)findViewById(R.id.roomName);
         type1 = (Spinner)findViewById(R.id.spinner_rooms);
         spinners = new ArrayList<Spinner>();
+        name = getIntent().getStringExtra("name");
+        if (name != null) {
+            roomName.setText(name);
+        }
+
 
         // Create an ArrayAdapter using the string array and a default spinner layout.
         ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(
@@ -46,16 +54,22 @@ public class AddRoom extends AppCompatActivity {
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner.
         type1.setAdapter(adapter1);
+        roomType = getIntent().getStringExtra("roomType");
+        if (roomType != null) {
+            type1.setSelection(adapter1.getPosition(roomType));
+        }
+        addCaptor(null);
     }
 
         public void createRoom(View v) {
         // si la salle n'a pas de nom ça fout la merde
-            String name = roomName.getText().toString();
+        // rajouter un nom par défaut
+            String name_selected = roomName.getText().toString();
             String room_type = (type1.getItemAtPosition(type1.getSelectedItemPosition()).toString());
+            FirebaseDatabase database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/");
             for (Spinner spinner : spinners) {
                 String captor = (spinner.getItemAtPosition(spinner.getSelectedItemPosition()).toString());
-                FirebaseDatabase database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/");
-                DatabaseReference myRef = database.getReference(room_type + "/" + name + "/" + captor);
+                DatabaseReference myRef = database.getReference(room_type + "/" + name_selected + "/" + captor);
                 if (captor.equals("Light")) {
                     myRef.setValue(false);
                 } else if (captor.equals("Temperature")) {
@@ -64,13 +78,21 @@ public class AddRoom extends AppCompatActivity {
                     myRef.setValue(false);
                 }
             }
-            Intent ia = new Intent(this, Menu.class);
+            DatabaseReference myRef = database.getReference();
+            if (!name.equals(name_selected) && !roomType.equals(room_type)) {
+                myRef.child(roomType + "/" + name).removeValue();
+            } else if (!name.equals(name_selected) && roomType.equals(room_type)) {
+                myRef.child(room_type + "/" + name).removeValue();
+            } else if (name.equals(name_selected) && !roomType.equals(room_type)) {
+                myRef.child(roomType + "/" + name_selected).removeValue();
+            }
+            Intent ia = new Intent(this, MainActivity.class);
             startActivity(ia);
         }
 
 
     public void addCaptor(View v) {
-        if (spinners.size() < getResources().getStringArray(R.array.captors).length - 1)  {
+        if (spinners.size() < getResources().getStringArray(R.array.captors).length)  {
             TableLayout table = findViewById(R.id.add_room_table);
             Spinner spinner = new Spinner(this);
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
@@ -91,4 +113,13 @@ public class AddRoom extends AppCompatActivity {
             Toast.makeText(this, "Nombre maximum de capteurs atteint",Toast.LENGTH_SHORT).show();
         }
     }
+
+    public void removeCaptor(View v) {
+        if (spinners.size() > 1) {
+            TableLayout table = findViewById(R.id.add_room_table);
+            table.removeView(spinners.get(spinners.size() - 1));
+            spinners.remove(spinners.size() - 1);
+        }
+    }
+
 }
