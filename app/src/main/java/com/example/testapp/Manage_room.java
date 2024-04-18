@@ -5,11 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -23,9 +21,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -69,10 +64,6 @@ public class Manage_room extends AppCompatActivity {
                         case "Light":
                             ToggleButton buttonL = findViewById(R.id.lightToggle);
                             buttonL.setChecked((Boolean) value);
-                            break;
-                        case "Temperature":
-                            TextView textTemperature = findViewById(R.id.temperatureValue);
-                            textTemperature.setText((String) value.toString());
                             break;
                         case "Volets":
                             ToggleButton buttonV = findViewById(R.id.voletValue);
@@ -127,12 +118,6 @@ public class Manage_room extends AppCompatActivity {
                         }
                     });
                     table.addView(buttonL);
-                    break;
-                case "Temperature":
-                    TextView temp = new TextView(context);
-                    temp.setId(R.id.temperatureValue);
-                    temp.setText((String) map.get(keys).toString());
-                    table.addView(temp);
                     break;
                 case "Volets":
                     ToggleButton buttonV = new ToggleButton(context);
@@ -195,7 +180,7 @@ public class Manage_room extends AppCompatActivity {
     }
 
     public void display_data(View v) {
-        Intent ia = new Intent(this, Display_data.class);
+        Intent ia = new Intent(this, DisplayTemperature.class);
         startActivity(ia);
     }
 

@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         Log.d("Layout selected", "accueil");
         DatabaseReference database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
         String[] listRoom = {"Bedroom", "Living_room", "Kitchen", "Bathroom", "Other"};
-        String[] listCaptor = {"Light", "Temperature", "Volets"};
         ArrayList<String> roomCaptor = new ArrayList<String>() {};
         ArrayList<Object> roomCaptorData = new ArrayList<Object>() {};
         // on cherche le noeud à ajouter
@@ -171,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void display_data(View v) {
-        Intent ia = new Intent(this, Display_data.class);
+        Intent ia = new Intent(this, DisplayTemperature.class);
         startActivity(ia);
     }
 }

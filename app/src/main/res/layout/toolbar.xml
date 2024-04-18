@@ -32,7 +32,7 @@
         <TextView
             android:textSize="17sp"
             android:gravity="center"
-            android:text="@string/toolbar2">
+            android:text="@string/toolbar4">
 
         </TextView>
 

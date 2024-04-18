@@ -74,8 +74,6 @@ public class AddRoom extends AppCompatActivity {
                     DatabaseReference myRef = database.getReference(room_type + "/" + name_selected + "/" + captor);
                     if (captor.equals("Light")) {
                         myRef.setValue(false);
-                    } else if (captor.equals("Temperature")) {
-                        myRef.setValue(0.0);
                     } else if (captor.equals("Volets")) {
                         myRef.setValue(false);
                     }

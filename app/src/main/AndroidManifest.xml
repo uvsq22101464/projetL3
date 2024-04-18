@@ -48,7 +48,7 @@
 
         </activity>
 
-        <activity android:name=".Display_data"
+        <activity android:name=".DisplayTemperature"
             android:exported="true"
             android:screenOrientation="portrait">
 

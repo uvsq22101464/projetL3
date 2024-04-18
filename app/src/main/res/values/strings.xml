@@ -16,7 +16,8 @@
     <string name="toolbar1">Accueil</string>
     <string name="toolbar2">Rien</string>
     <string name="toolbar3">Plannings</string>
-    <string name="toolbar4">Paramètres</string>
+    <string name="toolbar4">Température</string>
+    <string name="temperature">Température</string>
 
     <string-array name="roomType">
         <item>Bedroom</item>

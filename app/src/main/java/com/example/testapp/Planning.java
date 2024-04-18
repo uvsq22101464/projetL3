@@ -2,7 +2,6 @@ package com.example.testapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.renderscript.Sampler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -30,7 +29,6 @@ public class Planning extends AppCompatActivity {
 
     ArrayList<String> roomNames;
     String[] listRoom = {"Bedroom", "Living_room", "Kitchen", "Bathroom", "Other"};
-    String[] listCaptor = {"Light", "Temperature", "Volets"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,29 +41,13 @@ public class Planning extends AppCompatActivity {
         getRoomCaptors(roomNames, new CompletionListener() {
             @Override
             public void onComplete(HashMap<String, ArrayList<String>> map) {
-                Log.d("Data room with temperature", String.valueOf(map));
                 handleRoomCaptors(map);
             }
         });
     }
 
     public void handleRoomCaptors(HashMap<String, ArrayList<String>> map) {
-        ArrayList<String> roomWithTemperature = map.get("Temperature");
         ArrayList<String> roomWithVolets = map.get("Volets");
-        if (roomWithTemperature != null && !roomWithTemperature.isEmpty()) {
-            Button buttonTemperature = new Button(this);
-            buttonTemperature.setText("Gérer la température");
-            buttonTemperature.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent ia = new Intent(Planning.this, configPlanning.class);
-                    ia.putExtra("rooms", roomWithTemperature);
-                    startActivity(ia);
-                }
-            });
-            TableLayout table = findViewById(R.id.tablePlanning);
-            table.addView(buttonTemperature);
-        }
         if (roomWithVolets != null && !roomWithVolets.isEmpty()) {
             Button buttonVolets = new Button(this);
             buttonVolets.setText("Gérer les volets");
@@ -105,10 +87,7 @@ public class Planning extends AppCompatActivity {
                                     JSONObject data = new JSONObject(MainActivity.convert(task.getResult().getValue()));
                                     for (Iterator<String> it = data.keys(); it.hasNext(); ) {
                                         String captor = it.next();
-                                        if (captor.equals("Temperature")) {
-                                            nameTemp.add(roomName);
-                                            map.put("Temperature", nameTemp);
-                                        } else if (captor.equals("Volets")) {
+                                        if (captor.equals("Volets")) {
                                             nameVolet.add(roomName);
                                             map.put("Volets", nameVolet);
                                         }
@@ -120,7 +99,6 @@ public class Planning extends AppCompatActivity {
                         }
                         if (counter.decrementAndGet() == 0) {
                             listener.onComplete(map);
-                            Log.d("AAAAAAAAAAAAAA", String.valueOf(map));
                         }
                     }
                 });
@@ -145,7 +123,7 @@ public class Planning extends AppCompatActivity {
     }
 
     public void display_data(View v) {
-        Intent ia = new Intent(this, Display_data.class);
+        Intent ia = new Intent(this, DisplayTemperature.class);
         startActivity(ia);
     }
 }

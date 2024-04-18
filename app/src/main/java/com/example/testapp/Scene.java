@@ -33,7 +33,7 @@ public class Scene extends AppCompatActivity {
     }
 
     public void display_data(View v) {
-        Intent ia = new Intent(this, Display_data.class);
+        Intent ia = new Intent(this, DisplayTemperature.class);
         startActivity(ia);
     }
 }
