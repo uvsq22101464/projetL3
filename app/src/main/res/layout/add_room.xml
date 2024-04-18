@@ -15,7 +15,8 @@
             android:text="@string/add_room_title"
             android:textSize="25sp"
             android:gravity="center"
-            android:paddingBottom="30dp">
+            android:paddingBottom="30dp"
+            android:id="@+id/title">
 
         </TextView>
 

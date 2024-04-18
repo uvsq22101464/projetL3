@@ -10,6 +10,13 @@
     <string name="add_room_plus">Ajouter un capteur</string>
     <string name="modify">Modifier</string>
     <string name="add_room_minus">Enlever un capteur</string>
+    <string name="planning_temperature">Créer un nouveau planning</string>
+    <string name="add_planning">Nom du planning</string>
+    <string name="name_error">Le nom doit être renseigné</string>
+    <string name="toolbar1">Accueil</string>
+    <string name="toolbar2">Rien</string>
+    <string name="toolbar3">Plannings</string>
+    <string name="toolbar4">Paramètres</string>
 
     <string-array name="roomType">
         <item>Bedroom</item>

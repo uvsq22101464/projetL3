@@ -59,7 +59,7 @@ public class Planning extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent ia = new Intent(Planning.this, configPlanning.class);
-                    ia.putExtra("roomWithTemperature", roomWithTemperature);
+                    ia.putExtra("rooms", roomWithTemperature);
                     startActivity(ia);
                 }
             });
@@ -73,7 +73,7 @@ public class Planning extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent ia = new Intent(Planning.this, configPlanning.class);
-                    ia.putExtra("roomWithVolets", roomWithTemperature);
+                    ia.putExtra("rooms", roomWithVolets);
                     startActivity(ia);
                 }
             });
@@ -88,7 +88,8 @@ public class Planning extends AppCompatActivity {
 
     public void getRoomCaptors(ArrayList<String> names, CompletionListener listener) {
         HashMap<String, ArrayList<String>> map = new HashMap<>();
-        ArrayList<String> name = new ArrayList<String>();
+        ArrayList<String> nameTemp = new ArrayList<String>();
+        ArrayList<String> nameVolet = new ArrayList<String>();
         DatabaseReference database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
         AtomicInteger counter = new AtomicInteger(names.size() * listRoom.length);
         for (String rooms : listRoom) {
@@ -105,11 +106,11 @@ public class Planning extends AppCompatActivity {
                                     for (Iterator<String> it = data.keys(); it.hasNext(); ) {
                                         String captor = it.next();
                                         if (captor.equals("Temperature")) {
-                                            name.add(roomName);
-                                            map.put("Temperature", name);
+                                            nameTemp.add(roomName);
+                                            map.put("Temperature", nameTemp);
                                         } else if (captor.equals("Volets")) {
-                                            name.add(roomName);
-                                            map.put("Volets", name);
+                                            nameVolet.add(roomName);
+                                            map.put("Volets", nameVolet);
                                         }
                                     }
                                 } catch (JSONException e) {
@@ -119,6 +120,7 @@ public class Planning extends AppCompatActivity {
                         }
                         if (counter.decrementAndGet() == 0) {
                             listener.onComplete(map);
+                            Log.d("AAAAAAAAAAAAAA", String.valueOf(map));
                         }
                     }
                 });

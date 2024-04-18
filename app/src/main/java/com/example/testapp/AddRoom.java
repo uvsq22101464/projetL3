@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TableLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,6 +42,8 @@ public class AddRoom extends AppCompatActivity {
         name = getIntent().getStringExtra("name");
         if (name != null) {
             roomName.setText(name);
+            TextView title = findViewById(R.id.title);
+            title.setText("Modifier la pièce");
         }
 
 
@@ -62,32 +65,35 @@ public class AddRoom extends AppCompatActivity {
     }
 
         public void createRoom(View v) {
-        // si la salle n'a pas de nom ça fout la merde
-        // rajouter un nom par défaut
             String name_selected = roomName.getText().toString();
-            String room_type = (type1.getItemAtPosition(type1.getSelectedItemPosition()).toString());
-            FirebaseDatabase database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/");
-            for (Spinner spinner : spinners) {
-                String captor = (spinner.getItemAtPosition(spinner.getSelectedItemPosition()).toString());
-                DatabaseReference myRef = database.getReference(room_type + "/" + name_selected + "/" + captor);
-                if (captor.equals("Light")) {
-                    myRef.setValue(false);
-                } else if (captor.equals("Temperature")) {
-                    myRef.setValue(0.0);
-                } else if (captor.equals("Volets")) {
-                    myRef.setValue(false);
+            if (!name_selected.isEmpty()) {
+                String room_type = (type1.getItemAtPosition(type1.getSelectedItemPosition()).toString());
+                FirebaseDatabase database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/");
+                for (Spinner spinner : spinners) {
+                    String captor = (spinner.getItemAtPosition(spinner.getSelectedItemPosition()).toString());
+                    DatabaseReference myRef = database.getReference(room_type + "/" + name_selected + "/" + captor);
+                    if (captor.equals("Light")) {
+                        myRef.setValue(false);
+                    } else if (captor.equals("Temperature")) {
+                        myRef.setValue(0.0);
+                    } else if (captor.equals("Volets")) {
+                        myRef.setValue(false);
+                    }
                 }
+                DatabaseReference myRef = database.getReference();
+                if (!name.equals(name_selected) && !roomType.equals(room_type)) {
+                    myRef.child(roomType + "/" + name).removeValue();
+                } else if (!name.equals(name_selected) && roomType.equals(room_type)) {
+                    myRef.child(room_type + "/" + name).removeValue();
+                } else if (name.equals(name_selected) && !roomType.equals(room_type)) {
+                    myRef.child(roomType + "/" + name_selected).removeValue();
+                }
+                Intent ia = new Intent(this, MainActivity.class);
+                startActivity(ia);
+            } else {
+                Toast.makeText(this, getString(R.string.name_error), Toast.LENGTH_SHORT).show();
             }
-            DatabaseReference myRef = database.getReference();
-            if (!name.equals(name_selected) && !roomType.equals(room_type)) {
-                myRef.child(roomType + "/" + name).removeValue();
-            } else if (!name.equals(name_selected) && roomType.equals(room_type)) {
-                myRef.child(room_type + "/" + name).removeValue();
-            } else if (name.equals(name_selected) && !roomType.equals(room_type)) {
-                myRef.child(roomType + "/" + name_selected).removeValue();
-            }
-            Intent ia = new Intent(this, MainActivity.class);
-            startActivity(ia);
+
         }
 
 

@@ -9,30 +9,30 @@
 
     <TableRow>
         <TextView
-            android:textSize="14sp"
+            android:textSize="17sp"
             android:gravity="center"
-            android:text="Edit">
+            android:text="@string/toolbar1">
 
         </TextView>
 
         <TextView
-            android:textSize="14sp"
+            android:textSize="17sp"
             android:gravity="center"
-            android:text="Vue d'ensemble">
+            android:text="@string/toolbar2">
 
         </TextView>
 
         <TextView
-            android:textSize="14sp"
+            android:textSize="17sp"
             android:gravity="center"
-            android:text="autre">
+            android:text="@string/toolbar3">
 
         </TextView>
 
         <TextView
-            android:textSize="14sp"
+            android:textSize="17sp"
             android:gravity="center"
-            android:text="paramètres">
+            android:text="@string/toolbar2">
 
         </TextView>
 
