@@ -72,10 +72,19 @@ public class AddRoom extends AppCompatActivity {
                 for (Spinner spinner : spinners) {
                     String captor = (spinner.getItemAtPosition(spinner.getSelectedItemPosition()).toString());
                     DatabaseReference myRef = database.getReference(room_type + "/" + name_selected + "/" + captor);
-                    if (captor.equals("Light")) {
-                        myRef.setValue(false);
-                    } else if (captor.equals("Volets")) {
-                        myRef.setValue(false);
+                    switch (captor) {
+                        case "Lampes":
+                            myRef.setValue(false);
+                            break;
+                        case "Volets":
+                            myRef.setValue(false);
+                            break;
+                        case "Détecteur de fumée":
+                            myRef.setValue(false);
+                            break;
+                        case "Détecteur de mouvement":
+                            myRef.setValue(false);
+                            break;
                     }
                 }
                 DatabaseReference myRef = database.getReference();

@@ -18,6 +18,15 @@
     <string name="toolbar3">Plannings</string>
     <string name="toolbar4">Température</string>
     <string name="temperature">Température</string>
+    <string name="lampes_off">Eteint</string>
+    <string name="lampes_on">Allumé</string>
+    <string name="volets_off">Fermé</string>
+    <string name="volets_on">Ouvert</string>
+    <string name="fumee_off">Pas de fumée détecté</string>
+    <string name="fumee_on">Fumée détecté</string>
+    <string name="mouv_off">Aucun mouvement détecté</string>
+    <string name="mouv_on">Mouvement détecté</string>
+    <string name="delete">Supprimer</string>
 
     <string-array name="roomType">
         <item>Bedroom</item>
@@ -28,13 +37,16 @@
     </string-array>
 
     <string-array name="captors">
-        <item>Light</item>
-        <item>Temperature</item>
+        <item>Lampes</item>
         <item>Volets</item>
+        <item>Détecteur de fumée</item>
+        <item>Détecteur de mouvement</item>
     </string-array>
 
     <item name="lightToggle" type="id"/>
     <item name="temperatureValue" type="id"/>
     <item name="voletValue" type="id"/>
+    <item name="fumeeValue" type="id"/>
+    <item name="mouvValue" type="id"/>
 
 </resources>

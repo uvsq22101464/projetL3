@@ -31,7 +31,6 @@ import java.util.Iterator;
 public class MainActivity extends AppCompatActivity {
 
     Context context = this;
-    // on définit table, le layout où on se trouve
     TableRow table_text;
     TableRow table_button;
 

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -61,13 +62,35 @@ public class Manage_room extends AppCompatActivity {
                 for (String captor : roomCaptor) {
                     Object value = snapshot.child(captor).getValue();
                     switch (captor) {
-                        case "Light":
+                        case "Lampes":
                             ToggleButton buttonL = findViewById(R.id.lightToggle);
                             buttonL.setChecked((Boolean) value);
                             break;
                         case "Volets":
                             ToggleButton buttonV = findViewById(R.id.voletValue);
                             buttonV.setChecked((Boolean) value);
+                            break;
+                        case "Détecteur de fumée":
+                            TextView textDF = findViewById(R.id.fumeeValue);
+                            if ((boolean) value) {
+                                textDF.setText(getString(R.string.fumee_on));
+                                //
+                                // envoyer notif ici ?
+                                //
+                            } else {
+                                textDF.setText(getString(R.string.fumee_off));
+                            }
+                            break;
+                        case "Détecteur de mouvement":
+                            TextView textDM = findViewById(R.id.mouvValue);
+                            if ((boolean) value) {
+                                textDM.setText(getString(R.string.mouv_on));
+                                //
+                                // envoyer notif ici ?
+                                //
+                            } else {
+                                textDM.setText(getString(R.string.mouv_off));
+                            }
                             break;
                     }
                 }
@@ -90,16 +113,19 @@ public class Manage_room extends AppCompatActivity {
             TableRow row = new TableRow(context);
             row.addView(text, parameter);
             table.addView(row, parameter);
+            FirebaseDatabase database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/");
             switch (keys) {
-                case "Light":
+                case "Lampes":
                     ToggleButton buttonL = new ToggleButton(context);
                     buttonL.setId(R.id.lightToggle);
                     buttonL.setChecked((Boolean) map.get(keys));
+                    buttonL.setTextOff(getString(R.string.lampes_off));
+                    buttonL.setTextOn(getString(R.string.lampes_on));
                     buttonL.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DatabaseReference database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference(roomType + "/" + name + "/Light");
-                            database.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                            DatabaseReference databaseRef = database.getReference(roomType + "/" + name + "/Lampes");
+                            databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
                                     if (!task.isSuccessful()) {
@@ -108,7 +134,7 @@ public class Manage_room extends AppCompatActivity {
                                     Object data = task.getResult().getValue();
                                     if (data instanceof Boolean) {
                                         boolean value = (Boolean) data;
-                                        database.setValue(!value);
+                                        databaseRef.setValue(!value);
                                     } else {
                                         Log.e("Toggle Button", "unexpected value type : " + data.getClass().getSimpleName());
                                     }
@@ -123,11 +149,13 @@ public class Manage_room extends AppCompatActivity {
                     ToggleButton buttonV = new ToggleButton(context);
                     buttonV.setId(R.id.voletValue);
                     buttonV.setChecked((Boolean) map.get(keys));
+                    buttonV.setTextOff(getString(R.string.volets_off));
+                    buttonV.setTextOn(getString(R.string.volets_on));
                     buttonV.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DatabaseReference database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference(roomType + "/" + name + "/Volets");
-                            database.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                            DatabaseReference databaseRef = database.getReference(roomType + "/" + name + "/Volets");
+                            databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
                                     if (!task.isSuccessful()) {
@@ -136,7 +164,7 @@ public class Manage_room extends AppCompatActivity {
                                     Object data = task.getResult().getValue();
                                     if (data instanceof Boolean) {
                                         boolean value = (Boolean) data;
-                                        database.setValue(!value);
+                                        databaseRef.setValue(!value);
                                     } else {
                                         Log.e("Toggle Button", "unexpected value type : " + data.getClass().getSimpleName());
                                     }
@@ -147,11 +175,65 @@ public class Manage_room extends AppCompatActivity {
                     });
                     table.addView(buttonV);
                     break;
+                case "Détecteur de fumée":
+                    TextView textDF = new TextView(context);
+                    textDF.setId(R.id.fumeeValue);
+                    DatabaseReference fumee = database.getReference(roomType + "/" + name + "/Détecteur de fumée");
+                    fumee.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (!task.isSuccessful()) {
+                                Log.e("Texte Fumée", "error retrieving data Fumée", task.getException());
+                            }
+                            Object data = task.getResult().getValue();
+                            if (data instanceof Boolean) {
+                                if ((boolean) data) {
+                                    textDF.setText(getString(R.string.fumee_on));
+                                    //
+                                    // déclencher une notif ?
+                                } else {
+                                    textDF.setText(getString(R.string.fumee_off));
+                                }
+                            } else {
+                                Log.e("Texte Fumée", "unexpected value type : " + data.getClass().getSimpleName());
+                            }
+                        }
+                    });
+                    table.addView(textDF);
+                    break;
+                case "Détecteur de mouvement":
+                    TextView textDM = new TextView(context);
+                    textDM.setId(R.id.mouvValue);
+                    DatabaseReference mouv = database.getReference(roomType + "/" + name + "/Détecteur de mouvement");
+                    mouv.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (!task.isSuccessful()) {
+                                Log.e("Texte Mouvement", "error retrieving data Mouvement", task.getException());
+                            }
+                            Object data = task.getResult().getValue();
+                            if (data instanceof Boolean) {
+                                if ((boolean) data) {
+                                    textDM.setText(getString(R.string.mouv_on));
+                                    //
+                                    // déclencher une notif ?
+                                } else {
+                                    textDM.setText(getString(R.string.mouv_off));
+                                }
+                            } else {
+                                Log.e("Texte Mouvement", "unexpected value type : " + data.getClass().getSimpleName());
+                            }
+                        }
+                    });
+                    table.addView(textDM);
+                    break;
             }
         }
     }
 
-    public void reload(View v) {
+    public void delete(View v) {
+        database.removeValue();
+        Toast.makeText(this, name + ", suppression réussi", Toast.LENGTH_SHORT).show();
         Intent ia = new Intent(this, MainActivity.class);
         startActivity(ia);
     }
