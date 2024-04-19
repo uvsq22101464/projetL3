@@ -41,7 +41,7 @@
     <TableRow>
 
         <ImageButton
-            android:onClick="edit_room"
+            android:onClick="home"
             android:src="@drawable/ic_launcher_foreground">
 
         </ImageButton>

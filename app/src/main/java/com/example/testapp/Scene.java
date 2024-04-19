@@ -17,8 +17,8 @@ public class Scene extends AppCompatActivity {
     }
 
     //toolbar
-    public void edit_room(View v) {
-        Intent ia = new Intent(this, Menu.class);
+    public void home(View v) {
+        Intent ia = new Intent(this, MainActivity.class);
         startActivity(ia);
     }
 

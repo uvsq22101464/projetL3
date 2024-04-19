@@ -2,6 +2,7 @@ package com.example.testapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -47,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         String[] listRoom = {"Bedroom", "Living_room", "Kitchen", "Bathroom", "Other"};
         ArrayList<String> roomCaptor = new ArrayList<String>() {};
         ArrayList<Object> roomCaptorData = new ArrayList<Object>() {};
-        // on cherche le noeud à ajouter
         database.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                                                 try {
                                                     // on récup les données de la salle dans un JSONObject
                                                     JSONObject inRoomData =  data.getJSONObject(roomType).getJSONObject(name);
-                                                    // on itère sur tous les capteurs pr&sent dans la salle
+                                                    // on itère sur tous les capteurs présent dans la salle
                                                     Iterator<String> inRoomCaptor = inRoomData.keys();
                                                     ia.putExtra("name", name);
                                                     ia.putExtra("type", roomType);
@@ -132,6 +132,10 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                         table_text.addView(txt, parameter);
                                         table_button.addView(button, parameter);
+                                        SharedPreferences storage = getSharedPreferences("data", Context.MODE_PRIVATE);
+                                        SharedPreferences.Editor modif_storage = storage.edit();
+                                        modif_storage.putString("listRoom", listRoomNames.toString().substring(1, listRoomNames.toString().length() - 1));
+                                        modif_storage.apply();
                                     }
                                 } catch (JSONException ignored) {}
                             }
@@ -153,8 +157,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //toolbar
-    public void edit_room(View v) {
-        Intent ia = new Intent(this, Menu.class);
+    public void home(View v) {
+        Intent ia = new Intent(this, MainActivity.class);
         startActivity(ia);
     }
 
@@ -165,7 +169,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void planning(View v) {
         Intent ia = new Intent(this, Planning.class);
-        ia.putExtra("roomNames", listRoomNames);
         startActivity(ia);
     }
 

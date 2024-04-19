@@ -1,6 +1,8 @@
 package com.example.testapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -36,7 +39,10 @@ public class Planning extends AppCompatActivity {
         setContentView(R.layout.planning);
         Log.d("Layout selected", "planning");
 
-        roomNames = getIntent().getStringArrayListExtra("roomNames");
+        SharedPreferences storage = getSharedPreferences("data", Context.MODE_PRIVATE);
+        roomNames = new ArrayList<>(Arrays.asList(storage.getString("listRoom", "").split(", ")));
+        Log.d("TEST TEST TEST", roomNames.toString());
+        //roomNames = getIntent().getStringArrayListExtra("roomNames");
 
         getRoomCaptors(roomNames, new CompletionListener() {
             @Override
@@ -107,8 +113,8 @@ public class Planning extends AppCompatActivity {
     }
 
     //toolbar
-    public void edit_room(View v) {
-        Intent ia = new Intent(this, Menu.class);
+    public void home(View v) {
+        Intent ia = new Intent(this, MainActivity.class);
         startActivity(ia);
     }
 
