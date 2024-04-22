@@ -47,7 +47,7 @@ public class Manage_room extends AppCompatActivity {
         roomType = getIntent().getStringExtra("type");
         roomCaptor = getIntent().getStringArrayListExtra("roomCaptor");
         roomCaptorData = (ArrayList<?>) getIntent().getSerializableExtra("roomCaptorData");
-        database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference(roomType + "/" + name);
+        database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference(roomType + "/" + name + "/Mesures/");
         HashMap<String, Object> captorData = new HashMap<String, Object>();
         for (int i = 0; i < roomCaptor.size(); i++) {
             captorData.put(roomCaptor.get(i), roomCaptorData.get(i));
@@ -61,37 +61,43 @@ public class Manage_room extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (String captor : roomCaptor) {
                     Object value = snapshot.child(captor).getValue();
-                    switch (captor) {
-                        case "Lampes":
-                            ToggleButton buttonL = findViewById(R.id.lightToggle);
-                            buttonL.setChecked((Boolean) value);
-                            break;
-                        case "Volets":
-                            ToggleButton buttonV = findViewById(R.id.voletValue);
-                            buttonV.setChecked((Boolean) value);
-                            break;
-                        case "Détecteur de fumée":
-                            TextView textDF = findViewById(R.id.fumeeValue);
-                            if ((boolean) value) {
-                                textDF.setText(getString(R.string.fumee_on));
-                                //
-                                // envoyer notif ici ?
-                                //
-                            } else {
-                                textDF.setText(getString(R.string.fumee_off));
-                            }
-                            break;
-                        case "Détecteur de mouvement":
-                            TextView textDM = findViewById(R.id.mouvValue);
-                            if ((boolean) value) {
-                                textDM.setText(getString(R.string.mouv_on));
-                                //
-                                // envoyer notif ici ?
-                                //
-                            } else {
-                                textDM.setText(getString(R.string.mouv_off));
-                            }
-                            break;
+                    if (value != null) {
+                        switch (captor) {
+                            case "Lampes":
+                                ToggleButton buttonL = findViewById(R.id.lightToggle);
+                                buttonL.setChecked((boolean) value);
+                                break;
+                            case "Volets":
+                                ToggleButton buttonV = findViewById(R.id.voletValue);
+                                buttonV.setChecked((boolean) value);
+                                break;
+                            case "Température":
+                                TextView textTemp = findViewById(R.id.temperatureValue);
+                                textTemp.setText("Température actuelle : " + value + " °C");
+                                break;
+                            case "Détecteur de flamme":
+                                TextView textDF = findViewById(R.id.flammeValue);
+                                if ((boolean) value) {
+                                    textDF.setText(getString(R.string.flamme_on));
+                                    //
+                                    // envoyer notif ici ?
+                                    //
+                                } else {
+                                    textDF.setText(getString(R.string.flamme_off));
+                                }
+                                break;
+                            case "Détecteur de mouvement":
+                                TextView textDM = findViewById(R.id.mouvValue);
+                                if ((boolean) value) {
+                                    textDM.setText(getString(R.string.mouv_on));
+                                    //
+                                    // envoyer notif ici ?
+                                    //
+                                } else {
+                                    textDM.setText(getString(R.string.mouv_off));
+                                }
+                                break;
+                        }
                     }
                 }
             }
@@ -113,6 +119,7 @@ public class Manage_room extends AppCompatActivity {
             TableRow row = new TableRow(context);
             row.addView(text, parameter);
             table.addView(row, parameter);
+            Log.d("Affiche Keys", keys);
             FirebaseDatabase database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/");
             switch (keys) {
                 case "Lampes":
@@ -124,7 +131,7 @@ public class Manage_room extends AppCompatActivity {
                     buttonL.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DatabaseReference databaseRef = database.getReference(roomType + "/" + name + "/Lampes");
+                            DatabaseReference databaseRef = database.getReference(roomType + "/" + name + "/Mesures/Lampes");
                             databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -154,7 +161,7 @@ public class Manage_room extends AppCompatActivity {
                     buttonV.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DatabaseReference databaseRef = database.getReference(roomType + "/" + name + "/Volets");
+                            DatabaseReference databaseRef = database.getReference(roomType + "/" + name + "/Mesures/Volets");
                             databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -170,32 +177,47 @@ public class Manage_room extends AppCompatActivity {
                                     }
                                 }
                             });
-
                         }
                     });
                     table.addView(buttonV);
                     break;
-                case "Détecteur de fumée":
-                    TextView textDF = new TextView(context);
-                    textDF.setId(R.id.fumeeValue);
-                    DatabaseReference fumee = database.getReference(roomType + "/" + name + "/Détecteur de fumée");
-                    fumee.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                case "Température":
+                    TextView textTemp = new TextView(context);
+                    textTemp.setId(R.id.temperatureValue);
+                    DatabaseReference temp = database.getReference(roomType + "/" + name + "/Mesures/Température");
+                    temp.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
                             if (!task.isSuccessful()) {
-                                Log.e("Texte Fumée", "error retrieving data Fumée", task.getException());
+                                Log.e("Texte température", "error retrieving data température", task.getException());
+                            }
+                            Object data = task.getResult().getValue();
+                            textTemp.setText("Température actuelle : " + data.toString() + " °C");
+                        }
+                    });
+                    table.addView(textTemp);
+                    break;
+                case "Détecteur de flamme":
+                    TextView textDF = new TextView(context);
+                    textDF.setId(R.id.flammeValue);
+                    DatabaseReference flamme = database.getReference(roomType + "/" + name + "/Mesures/Détecteur de flamme");
+                    flamme.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (!task.isSuccessful()) {
+                                Log.e("Texte flamme", "error retrieving data flamme", task.getException());
                             }
                             Object data = task.getResult().getValue();
                             if (data instanceof Boolean) {
                                 if ((boolean) data) {
-                                    textDF.setText(getString(R.string.fumee_on));
+                                    textDF.setText(getString(R.string.flamme_on));
                                     //
                                     // déclencher une notif ?
                                 } else {
-                                    textDF.setText(getString(R.string.fumee_off));
+                                    textDF.setText(getString(R.string.flamme_off));
                                 }
                             } else {
-                                Log.e("Texte Fumée", "unexpected value type : " + data.getClass().getSimpleName());
+                                Log.e("Texte flamme", "unexpected value type : " + data.getClass().getSimpleName());
                             }
                         }
                     });
@@ -204,7 +226,7 @@ public class Manage_room extends AppCompatActivity {
                 case "Détecteur de mouvement":
                     TextView textDM = new TextView(context);
                     textDM.setId(R.id.mouvValue);
-                    DatabaseReference mouv = database.getReference(roomType + "/" + name + "/Détecteur de mouvement");
+                    DatabaseReference mouv = database.getReference(roomType + "/" + name + "/Mesures/Détecteur de mouvement");
                     mouv.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {

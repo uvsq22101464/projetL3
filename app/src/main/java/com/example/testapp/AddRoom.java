@@ -71,7 +71,7 @@ public class AddRoom extends AppCompatActivity {
                 FirebaseDatabase database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/");
                 for (Spinner spinner : spinners) {
                     String captor = (spinner.getItemAtPosition(spinner.getSelectedItemPosition()).toString());
-                    DatabaseReference myRef = database.getReference(room_type + "/" + name_selected + "/" + captor);
+                    DatabaseReference myRef = database.getReference(room_type + "/" + name_selected + "/Mesures/" + captor);
                     switch (captor) {
                         case "Lampes":
                             myRef.setValue(false);
@@ -79,7 +79,10 @@ public class AddRoom extends AppCompatActivity {
                         case "Volets":
                             myRef.setValue(false);
                             break;
-                        case "Détecteur de fumée":
+                        case "Température":
+                            myRef.setValue(0);
+                            break;
+                        case "Détecteur de flamme":
                             myRef.setValue(false);
                             break;
                         case "Détecteur de mouvement":
@@ -100,7 +103,6 @@ public class AddRoom extends AppCompatActivity {
             } else {
                 Toast.makeText(this, getString(R.string.name_error), Toast.LENGTH_SHORT).show();
             }
-
         }
 
 

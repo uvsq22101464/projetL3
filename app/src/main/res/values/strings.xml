@@ -22,8 +22,8 @@
     <string name="lampes_on">Allumé</string>
     <string name="volets_off">Fermé</string>
     <string name="volets_on">Ouvert</string>
-    <string name="fumee_off">Pas de fumée détecté</string>
-    <string name="fumee_on">Fumée détecté</string>
+    <string name="flamme_off">Pas de flamme détecté</string>
+    <string name="flamme_on">Flamme détecté</string>
     <string name="mouv_off">Aucun mouvement détecté</string>
     <string name="mouv_on">Mouvement détecté</string>
     <string name="delete">Supprimer</string>
@@ -39,14 +39,15 @@
     <string-array name="captors">
         <item>Lampes</item>
         <item>Volets</item>
-        <item>Détecteur de fumée</item>
+        <item>Température</item>
+        <item>Détecteur de flamme</item>
         <item>Détecteur de mouvement</item>
     </string-array>
 
     <item name="lightToggle" type="id"/>
     <item name="temperatureValue" type="id"/>
     <item name="voletValue" type="id"/>
-    <item name="fumeeValue" type="id"/>
+    <item name="flammeValue" type="id"/>
     <item name="mouvValue" type="id"/>
 
 </resources>

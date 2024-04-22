@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                                                 Intent ia = new Intent(MainActivity.this, Manage_room.class);
                                                 try {
                                                     // on récup les données de la salle dans un JSONObject
-                                                    JSONObject inRoomData =  data.getJSONObject(roomType).getJSONObject(name);
+                                                    JSONObject inRoomData =  data.getJSONObject(roomType).getJSONObject(name).getJSONObject("Mesures");
                                                     // on itère sur tous les capteurs présent dans la salle
                                                     Iterator<String> inRoomCaptor = inRoomData.keys();
                                                     ia.putExtra("name", name);
@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                                                         roomCaptor.add(name);
                                                         roomCaptorData.add(inRoomData.get(name));
                                                     }
+                                                    Log.d("DATA ROOM CAPTOR", String.valueOf(roomCaptor));
                                                     ia.putExtra("roomCaptor", roomCaptor);
                                                     ia.putExtra("roomCaptorData", (Serializable) roomCaptorData);
                                                     Log.d("Value sent to manage", String.valueOf(roomCaptorData));
