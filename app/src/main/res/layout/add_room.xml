@@ -34,14 +34,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/add_room_table">
 
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/spinner_rooms"
-                android:layout_margin="10sp">
-
-            </Spinner>
-
         </TableLayout>
 
         <LinearLayout

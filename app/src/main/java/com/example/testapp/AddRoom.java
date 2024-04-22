@@ -24,20 +24,15 @@ import java.util.ArrayList;
 public class AddRoom extends AppCompatActivity {
 
     EditText roomName;
-    Spinner type1;
     ArrayList<Spinner> spinners;
     String name;
-    String roomType;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_room);
         Log.d("Layout selected", "add_room");
-
         roomName = (EditText)findViewById(R.id.roomName);
-        type1 = (Spinner)findViewById(R.id.spinner_rooms);
         spinners = new ArrayList<Spinner>();
         name = getIntent().getStringExtra("name");
         if (name != null) {
@@ -45,33 +40,16 @@ public class AddRoom extends AppCompatActivity {
             TextView title = findViewById(R.id.title);
             title.setText("Modifier la pièce");
         }
-
-
-        // Create an ArrayAdapter using the string array and a default spinner layout.
-        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(
-                this,
-                R.array.roomType,
-                android.R.layout.simple_spinner_item
-        );
-        // Specify the layout to use when the list of choices appears.
-        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner.
-        type1.setAdapter(adapter1);
-        roomType = getIntent().getStringExtra("roomType");
-        if (roomType != null) {
-            type1.setSelection(adapter1.getPosition(roomType));
-        }
         addCaptor(null);
     }
 
         public void createRoom(View v) {
             String name_selected = roomName.getText().toString();
             if (!name_selected.isEmpty()) {
-                String room_type = (type1.getItemAtPosition(type1.getSelectedItemPosition()).toString());
                 FirebaseDatabase database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/");
                 for (Spinner spinner : spinners) {
                     String captor = (spinner.getItemAtPosition(spinner.getSelectedItemPosition()).toString());
-                    DatabaseReference myRef = database.getReference(room_type + "/" + name_selected + "/Mesures/" + captor);
+                    DatabaseReference myRef = database.getReference("Maison/" + name_selected + "/Mesures/" + captor);
                     switch (captor) {
                         case "Lampes":
                             myRef.setValue(false);
@@ -91,12 +69,9 @@ public class AddRoom extends AppCompatActivity {
                     }
                 }
                 DatabaseReference myRef = database.getReference();
-                if (!name.equals(name_selected) && !roomType.equals(room_type)) {
-                    myRef.child(roomType + "/" + name).removeValue();
-                } else if (!name.equals(name_selected) && roomType.equals(room_type)) {
-                    myRef.child(room_type + "/" + name).removeValue();
-                } else if (name.equals(name_selected) && !roomType.equals(room_type)) {
-                    myRef.child(roomType + "/" + name_selected).removeValue();
+                // lors du rename on perd les anciens capteurs
+                if (!name.equals(name_selected)) {
+                    myRef.child("Maison/" + name).removeValue();
                 }
                 Intent ia = new Intent(this, MainActivity.class);
                 startActivity(ia);
@@ -136,5 +111,4 @@ public class AddRoom extends AppCompatActivity {
             spinners.remove(spinners.size() - 1);
         }
     }
-
 }

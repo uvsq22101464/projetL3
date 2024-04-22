@@ -31,9 +31,7 @@ import java.util.Iterator;
 public class MainActivity extends AppCompatActivity {
 
     Context context = this;
-    TableRow table_text;
-    TableRow table_button;
-
+    TableRow table;
     ArrayList<String> listRoomNames = new ArrayList<String>();
 
 
@@ -44,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.accueil);
         Log.d("Layout selected", "accueil");
         DatabaseReference database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
-        String[] listRoom = {"Bedroom", "Living_room", "Kitchen", "Bathroom", "Other"};
         ArrayList<String> roomCaptor = new ArrayList<String>() {};
         ArrayList<Object> roomCaptorData = new ArrayList<Object>() {};
         database.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -58,19 +55,15 @@ public class MainActivity extends AppCompatActivity {
                             Log.e("JSON data", String.valueOf(task.getResult()));
                             JSONObject data = new JSONObject(convert(task.getResult().getValue()));
 
-                            for (String roomType : listRoom) {
                                 try {
-                                    JSONObject roomData = data.getJSONObject(roomType);
+                                    JSONObject roomData = data.getJSONObject("Maison");
                                     Iterator<String> roomNames = roomData.keys();
                                     while(roomNames.hasNext()) {
                                         String name = roomNames.next();
                                         listRoomNames.add(name);
                                         Log.d("firebase", name);
                                         // on crée le textView et le bouton et on leur donne ce qu'ils contiennent
-                                        TextView txt = new TextView(context);
                                         Button button = new Button(context);
-                                        txt.setText(name);
-                                        txt.setGravity(Gravity.CENTER);
                                         button.setText(name);
                                         button.setGravity(Gravity.CENTER);
                                         // on def le click du bouton
@@ -80,11 +73,10 @@ public class MainActivity extends AppCompatActivity {
                                                 Intent ia = new Intent(MainActivity.this, Manage_room.class);
                                                 try {
                                                     // on récup les données de la salle dans un JSONObject
-                                                    JSONObject inRoomData =  data.getJSONObject(roomType).getJSONObject(name).getJSONObject("Mesures");
+                                                    JSONObject inRoomData =  data.getJSONObject("Maison").getJSONObject(name).getJSONObject("Mesures");
                                                     // on itère sur tous les capteurs présent dans la salle
                                                     Iterator<String> inRoomCaptor = inRoomData.keys();
                                                     ia.putExtra("name", name);
-                                                    ia.putExtra("type", roomType);
 
                                                     while (inRoomCaptor.hasNext()) {
                                                         String name = inRoomCaptor.next();
@@ -102,43 +94,18 @@ public class MainActivity extends AppCompatActivity {
                                             }
                                         });
 
-                                        // on setup des paramètres pour les textes et les boutons
                                         TableRow.LayoutParams parameter = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT);
-                                        txt.setLayoutParams(parameter);
                                         button.setLayoutParams(parameter);
+                                        table = (TableRow) findViewById(R.id.table);
+                                        table.addView(button);
 
-                                        // on ajoute dans la table parente et on cherche la bonne table
-                                        switch (roomType) {
-                                            case "Bedroom":
-                                                table_text = (TableRow) findViewById(R.id.table_bedroom_text);
-                                                table_button = (TableRow) findViewById(R.id.table_bedroom_button);
-                                                break;
-                                            case "Living_room":
-                                                table_text = (TableRow) findViewById(R.id.table_living_room_text);
-                                                table_button = (TableRow) findViewById(R.id.table_living_room_button);
-                                                break;
-                                            case "Kitchen":
-                                                table_text = (TableRow) findViewById(R.id.table_kitchen_text);
-                                                table_button = (TableRow) findViewById(R.id.table_kitchen_button);
-                                                break;
-                                            case "Bathroom":
-                                                table_text = (TableRow) findViewById(R.id.table_bathroom_text);
-                                                table_button = (TableRow) findViewById(R.id.table_bathroom_button);
-                                                break;
-                                            default:
-                                                table_text = (TableRow) findViewById(R.id.table_other_text);
-                                                table_button = (TableRow) findViewById(R.id.table_other_button);
-                                                break;
-                                        }
-                                        table_text.addView(txt, parameter);
-                                        table_button.addView(button, parameter);
                                         SharedPreferences storage = getSharedPreferences("data", Context.MODE_PRIVATE);
                                         SharedPreferences.Editor modif_storage = storage.edit();
                                         modif_storage.putString("listRoom", listRoomNames.toString().substring(1, listRoomNames.toString().length() - 1));
                                         modif_storage.apply();
                                     }
                                 } catch (JSONException ignored) {}
-                            }
+
                         }catch (JSONException e) {
                             e.printStackTrace();
                     }

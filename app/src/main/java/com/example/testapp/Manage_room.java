@@ -29,7 +29,6 @@ public class Manage_room extends AppCompatActivity {
 
     Context context = this;
     String name;
-    String roomType;
     ArrayList<String> roomCaptor;
     ArrayList<?> roomCaptorData;
     DatabaseReference database;
@@ -44,10 +43,9 @@ public class Manage_room extends AppCompatActivity {
         TextView text = findViewById(R.id.name);
         text.setText(name);
         text.setTextSize(25);
-        roomType = getIntent().getStringExtra("type");
         roomCaptor = getIntent().getStringArrayListExtra("roomCaptor");
         roomCaptorData = (ArrayList<?>) getIntent().getSerializableExtra("roomCaptorData");
-        database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference(roomType + "/" + name + "/Mesures/");
+        database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference( "Maison/" + name + "/Mesures/");
         HashMap<String, Object> captorData = new HashMap<String, Object>();
         for (int i = 0; i < roomCaptor.size(); i++) {
             captorData.put(roomCaptor.get(i), roomCaptorData.get(i));
@@ -131,7 +129,7 @@ public class Manage_room extends AppCompatActivity {
                     buttonL.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DatabaseReference databaseRef = database.getReference(roomType + "/" + name + "/Mesures/Lampes");
+                            DatabaseReference databaseRef = database.getReference( "Maison/" + name + "/Mesures/Lampes");
                             databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -147,7 +145,6 @@ public class Manage_room extends AppCompatActivity {
                                     }
                                 }
                             });
-
                         }
                     });
                     table.addView(buttonL);
@@ -161,7 +158,7 @@ public class Manage_room extends AppCompatActivity {
                     buttonV.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DatabaseReference databaseRef = database.getReference(roomType + "/" + name + "/Mesures/Volets");
+                            DatabaseReference databaseRef = database.getReference("Maison/" + name + "/Mesures/Volets");
                             databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -184,7 +181,7 @@ public class Manage_room extends AppCompatActivity {
                 case "Température":
                     TextView textTemp = new TextView(context);
                     textTemp.setId(R.id.temperatureValue);
-                    DatabaseReference temp = database.getReference(roomType + "/" + name + "/Mesures/Température");
+                    DatabaseReference temp = database.getReference("Maison/" + name + "/Mesures/Température");
                     temp.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -200,7 +197,7 @@ public class Manage_room extends AppCompatActivity {
                 case "Détecteur de flamme":
                     TextView textDF = new TextView(context);
                     textDF.setId(R.id.flammeValue);
-                    DatabaseReference flamme = database.getReference(roomType + "/" + name + "/Mesures/Détecteur de flamme");
+                    DatabaseReference flamme = database.getReference("Maison/" + name + "/Mesures/Détecteur de flamme");
                     flamme.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -226,7 +223,7 @@ public class Manage_room extends AppCompatActivity {
                 case "Détecteur de mouvement":
                     TextView textDM = new TextView(context);
                     textDM.setId(R.id.mouvValue);
-                    DatabaseReference mouv = database.getReference(roomType + "/" + name + "/Mesures/Détecteur de mouvement");
+                    DatabaseReference mouv = database.getReference("Maison/" + name + "/Mesures/Détecteur de mouvement");
                     mouv.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -263,7 +260,6 @@ public class Manage_room extends AppCompatActivity {
     public void modify(View v) {
         Intent ia = new Intent(this, AddRoom.class);
         ia.putExtra("name", name);
-        ia.putExtra("roomType", roomType);
         startActivity(ia);
     }
 
@@ -287,5 +283,4 @@ public class Manage_room extends AppCompatActivity {
         Intent ia = new Intent(this, DisplayTemperature.class);
         startActivity(ia);
     }
-
 }
