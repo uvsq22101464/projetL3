@@ -54,23 +54,34 @@ public class AddRoom extends AppCompatActivity {
                         case "Lampes":
                             myRef.setValue(false);
                             break;
+                        case "Lampes automatiques":
+                            myRef.setValue(false);
+                            database.getReference("Maison/" + name_selected + "/Mesures/Détecteur de mouvement").setValue(false);
+                            database.getReference("Maison/" + name_selected + "/Mesures/Mode Lumière").setValue(true);
+                            break;
                         case "Volets":
                             myRef.setValue(false);
                             break;
-                        case "Température":
-                            myRef.setValue(0);
+                        case "Volets automatiques":
+                            myRef.setValue(false);
+                            database.getReference("Maison/" + name_selected + "/Mesures/Luminosité").setValue(0);
+                            database.getReference("Maison/" + name_selected + "/Mesures/Mode Volets").setValue(true);
+                            database.getReference(getString(R.string.seuilLum)).setValue(600);
+                            break;
+                        case "Chauffage":
+                            myRef.setValue(false);
+                            database.getReference("Maison/" + name_selected + "/Mesures/Température").setValue(0);
+                            database.getReference("Température de chauffage").setValue(20);
                             break;
                         case "Détecteur de flamme":
                             myRef.setValue(false);
-                            break;
-                        case "Détecteur de mouvement":
-                            myRef.setValue(false);
+                            database.getReference(getString(R.string.seuilFlamme)).setValue(1000);
                             break;
                     }
                 }
                 DatabaseReference myRef = database.getReference();
                 // lors du rename on perd les anciens capteurs
-                if (!name.equals(name_selected)) {
+                if (name != null && !name.equals(name_selected)) {
                     myRef.child("Maison/" + name).removeValue();
                 }
                 Intent ia = new Intent(this, MainActivity.class);

@@ -26,25 +26,27 @@
     <string name="flamme_on">Flamme détecté</string>
     <string name="mouv_off">Aucun mouvement détecté</string>
     <string name="mouv_on">Mouvement détecté</string>
+    <string name="mode_on">Activé</string>
+    <string name="mode_off">Désactivé</string>
     <string name="delete">Supprimer</string>
-
-    <string-array name="roomType">
-        <item>Bedroom</item>
-        <item>Kitchen</item>
-        <item>Living_room</item>
-        <item>Bathroom</item>
-        <item>Other</item>
-    </string-array>
+    <string name="seuilLum">Seuil Luminosité</string>
+    <string name="detec_mouv_lum">Détecteur de mouvement lumière</string>
+    <string name="seuilFlamme">Seuil Flamme</string>
+    <string name="mode_auto_off">Mode automatique désactivé</string>
+    <string name="mode_auto_on">Mode automatique activé</string>
 
     <string-array name="captors">
         <item>Lampes</item>
+        <item>Lampes automatiques</item>
         <item>Volets</item>
-        <item>Température</item>
+        <item>Volets automatiques</item>
+        <item>Chauffage</item>
         <item>Détecteur de flamme</item>
-        <item>Détecteur de mouvement</item>
     </string-array>
 
     <item name="lightToggle" type="id"/>
+    <item name="lightAutoToggle" type="id"/>
+    <item name="lightAutoModeToggle" type="id"/>
     <item name="temperatureValue" type="id"/>
     <item name="voletValue" type="id"/>
     <item name="flammeValue" type="id"/>
