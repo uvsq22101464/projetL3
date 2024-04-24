@@ -34,6 +34,8 @@
     <string name="seuilFlamme">Seuil Flamme</string>
     <string name="mode_auto_off">Mode automatique désactivé</string>
     <string name="mode_auto_on">Mode automatique activé</string>
+    <string name="heater_on">Chauffage activé</string>
+    <string name="heater_off">Chauffage désactivé</string>
 
     <string-array name="captors">
         <item>Lampes</item>
@@ -51,5 +53,7 @@
     <item name="voletValue" type="id"/>
     <item name="flammeValue" type="id"/>
     <item name="mouvValue" type="id"/>
+    <item name="heater" type="id"/>
+    <item name="buttonHeater" type="id"/>
 
 </resources>

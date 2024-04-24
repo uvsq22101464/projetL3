@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.NumberPicker;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -77,9 +79,13 @@ public class Manage_room extends AppCompatActivity {
                                 ToggleButton buttonV = findViewById(R.id.voletValue);
                                 buttonV.setChecked((boolean) value);
                                 break;
-                            case "Chauffage":
+                            case "Température":
                                 TextView textTemp = findViewById(R.id.temperatureValue);
-                                textTemp.setText("Température actuelle : " + snapshot.child("Température").getValue() + " °C");
+                                textTemp.setText("Température actuelle : " + value + " °C");
+                                break;
+                            case "Chauffage":
+                                ToggleButton heater = findViewById(R.id.buttonHeater);
+                                heater.setChecked((boolean) value);
                                 break;
                             case "Détecteur de flamme":
                                 TextView textDF = findViewById(R.id.flammeValue);
@@ -259,6 +265,65 @@ public class Manage_room extends AppCompatActivity {
                         }
                     });
                     table.addView(textTemp);
+
+                    NumberPicker heater = new NumberPicker(context);
+                    heater.setId(R.id.heater);
+                    heater.setMinValue(0);
+                    heater.setMaxValue(40);
+                    heater.setWrapSelectorWheel(false);
+                    DatabaseReference heat = database.getReference().child("Température de chauffage");
+                    heat.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (!task.isSuccessful()) {
+                                Log.e("Texte chauffage", "error retrieving data heater", task.getException());
+                            }
+                            Object data = task.getResult().getValue();
+                            if (data instanceof Long) {
+                                Long long_data = (Long) data;
+                                int int_data = long_data.intValue();
+                                heater.setValue(int_data);
+                            } else {
+                                Log.e("Data type", "Unexpected data type " + data.getClass().getSimpleName() + "expected Long");
+                            }
+                        }
+                    });
+                    heater.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                        @Override
+                        public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                            heat.setValue(newVal);
+                        }
+                    });
+                    table.addView(heater);
+
+                    ToggleButton buttonHeater = new ToggleButton(context);
+                    buttonHeater.setId(R.id.buttonHeater);
+                    buttonHeater.setChecked((Boolean) map.get(keys));
+                    buttonHeater.setTextOn(getString(R.string.heater_on));
+                    buttonHeater.setTextOff(getString(R.string.heater_off));
+                    buttonHeater.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DatabaseReference heaterRef = database.getReference("Maison/" + name + "/Mesures/Chauffage");
+                            heaterRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    if (!task.isSuccessful()) {
+                                        Log.e("Data chauffage", "error retrieving data Chauffage");
+                                    }
+                                    Object data = task.getResult().getValue();
+                                    if (data instanceof Boolean) {
+                                        boolean value = (Boolean) data;
+                                        heaterRef.setValue(!value);
+                                    } else {
+                                        Log.e("Toggle Button", "unexpected value type : " + data.getClass().getSimpleName());
+                                    }
+                                }
+                            });
+                        }
+                    });
+
+                    table.addView(buttonHeater);
                     break;
                 case "Détecteur de flamme":
                     TextView textDF = new TextView(context);
