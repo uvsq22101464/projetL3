@@ -1,12 +1,9 @@
 package com.example.testapp;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -58,6 +55,7 @@ public class AddRoom extends AppCompatActivity {
                             myRef.setValue(false);
                             database.getReference("Maison/" + name_selected + "/Mesures/Détecteur de mouvement").setValue(false);
                             database.getReference("Maison/" + name_selected + "/Mesures/Mode Lumière").setValue(true);
+                            database.getReference("Maison/" + name_selected + "/Mesures/Alarme").setValue(false);
                             break;
                         case "Volets":
                             myRef.setValue(false);

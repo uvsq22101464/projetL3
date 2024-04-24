@@ -29,12 +29,18 @@
 
         </Button>
 
-        <TableLayout
+        <ScrollView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/table">
+            android:layout_height="420dp">
 
-        </TableLayout>
+            <TableLayout
+                android:id="@+id/table"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TableLayout>
+
+        </ScrollView>
 
         <Button
             android:layout_width="wrap_content"

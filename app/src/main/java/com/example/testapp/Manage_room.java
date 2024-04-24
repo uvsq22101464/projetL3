@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -47,7 +46,7 @@ public class Manage_room extends AppCompatActivity {
         text.setTextSize(25);
         roomCaptor = getIntent().getStringArrayListExtra("roomCaptor");
         roomCaptorData = (ArrayList<?>) getIntent().getSerializableExtra("roomCaptorData");
-        database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference( "Maison/" + name + "/Mesures/");
+        database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Maison/" + name + "/Mesures/");
         HashMap<String, Object> captorData = new HashMap<String, Object>();
         for (int i = 0; i < roomCaptor.size(); i++) {
             captorData.put(roomCaptor.get(i), roomCaptorData.get(i));
@@ -74,6 +73,17 @@ public class Manage_room extends AppCompatActivity {
                             case "Mode Lumière":
                                 ToggleButton buttonLAMode = findViewById(R.id.lightAutoModeToggle);
                                 buttonLAMode.setChecked((boolean) value);
+                                break;
+                            case "Alarme":
+                                ToggleButton buttonAlarm = findViewById(R.id.alarmToggle);
+                                buttonAlarm.setChecked((boolean) value);
+                                break;
+                            case "Détecteur de mouvement":
+                                Object checkAlarm = snapshot.child("Alarme").getValue();
+                                if ((boolean) value && (boolean) checkAlarm) {
+                                    //Envoie de la notif ici
+
+                                }
                                 break;
                             case "Volets":
                                 ToggleButton buttonV = findViewById(R.id.voletValue);
@@ -228,6 +238,34 @@ public class Manage_room extends AppCompatActivity {
                         }
                     });
                     table.addView(buttonLAMode);
+
+                    ToggleButton alarm = new ToggleButton(context);
+                    alarm.setId(R.id.alarmToggle);
+                    alarm.setChecked((boolean) map.get("Alarme"));
+                    alarm.setTextOn(getString(R.string.alarm_on));
+                    alarm.setTextOff(getString(R.string.alarm_off));
+                    alarm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DatabaseReference alarmRef = database.getReference("Maison/" + name + "/Mesures/Alarme");
+                            alarmRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    if (!task.isSuccessful()) {
+                                        Log.e("Toggle Button", "error retrieving data Alarm", task.getException());
+                                    }
+                                    Object data = task.getResult().getValue();
+                                    if (data instanceof Boolean) {
+                                        boolean value = (Boolean) data;
+                                        alarmRef.setValue(!value);
+                                    } else {
+                                        Log.e("Toggle Button", "unexpected value type : " + data.getClass().getSimpleName());
+                                    }
+                                }
+                            });
+                        }
+                    });
+                    table.addView(alarm);
                     break;
                 case "Volets":
                     ToggleButton buttonV = new ToggleButton(context);

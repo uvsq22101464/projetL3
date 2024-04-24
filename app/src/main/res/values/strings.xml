@@ -36,6 +36,8 @@
     <string name="mode_auto_on">Mode automatique activé</string>
     <string name="heater_on">Chauffage activé</string>
     <string name="heater_off">Chauffage désactivé</string>
+    <string name="alarm_on">Alarme activée</string>
+    <string name="alarm_off">Alarme désactivée</string>
 
     <string-array name="captors">
         <item>Lampes</item>
@@ -58,6 +60,7 @@
     <item name="heater" type="id"/>
     <item name="buttonHeater" type="id"/>
     <item name="luminosity" type="id"/>
+    <item name="alarmToggle" type="id"/>
 
 
 </resources>
