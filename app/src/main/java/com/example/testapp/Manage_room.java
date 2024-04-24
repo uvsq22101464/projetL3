@@ -79,6 +79,14 @@ public class Manage_room extends AppCompatActivity {
                                 ToggleButton buttonV = findViewById(R.id.voletValue);
                                 buttonV.setChecked((boolean) value);
                                 break;
+                            case "Volets automatiques":
+                                ToggleButton buttonVA = findViewById(R.id.voletAutoToggle);
+                                buttonVA.setChecked((boolean) value);
+                                break;
+                            case "Mode Volets":
+                                ToggleButton buttonVAMode = findViewById(R.id.voletAutoModeToggle);
+                                buttonVAMode.setChecked((boolean) value);
+                                break;
                             case "Température":
                                 TextView textTemp = findViewById(R.id.temperatureValue);
                                 textTemp.setText("Température actuelle : " + value + " °C");
@@ -249,6 +257,105 @@ public class Manage_room extends AppCompatActivity {
                         }
                     });
                     table.addView(buttonV);
+                    break;
+                case "Volets automatiques":
+                    ToggleButton buttonVA = new ToggleButton(context);
+                    buttonVA.setId(R.id.voletAutoToggle);
+                    buttonVA.setChecked((Boolean) map.get(keys));
+                    buttonVA.setTextOff(getString(R.string.volets_off));
+                    buttonVA.setTextOn(getString(R.string.volets_on));
+                    buttonVA.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DatabaseReference databaseRef = database.getReference( "Maison/" + name + "/Mesures");
+                            databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    Object mode_data = task.getResult().child("Mode Volets").getValue();
+                                    if ((boolean) mode_data) {
+                                        databaseRef.child("Mode Volets").setValue(false);
+                                        Toast.makeText(Manage_room.this, getString(R.string.mode_auto_off), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                            databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    if (!task.isSuccessful()) {
+                                        Log.e("Toggle Button", "error retrieving data", task.getException());
+                                    }
+                                    Object data = task.getResult().child("Volets automatiques").getValue();
+                                    if (data instanceof Boolean) {
+                                        boolean value = (Boolean) data;
+                                        databaseRef.child("Volets automatiques").setValue(!value);
+                                    } else {
+                                        Log.e("Toggle Button", "unexpected value type : " + data.getClass().getSimpleName());
+                                    }
+                                }
+                            });
+                        }
+                    });
+                    table.addView(buttonVA);
+                    // création du bouton pour changer le mode
+                    ToggleButton buttonVAMode = new ToggleButton(context);
+                    buttonVAMode.setId(R.id.voletAutoModeToggle);
+                    buttonVAMode.setChecked((Boolean) map.get("Mode Volets"));
+                    buttonVAMode.setTextOff(getString(R.string.mode_off));
+                    buttonVAMode.setTextOn(getString(R.string.mode_on));
+                    buttonVAMode.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DatabaseReference databaseRef = database.getReference( "Maison/" + name + "/Mesures/Mode Volets");
+                            databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    if (!task.isSuccessful()) {
+                                        Log.e("Toggle Button", "error retrieving data", task.getException());
+                                    }
+                                    Object data = task.getResult().getValue();
+                                    if (data instanceof Boolean) {
+                                        boolean value = (Boolean) data;
+                                        databaseRef.setValue(!value);
+                                        Toast.makeText(Manage_room.this, getString(R.string.mode_auto_on), Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Log.e("Toggle Button", "unexpected value type : " + data.getClass().getSimpleName());
+                                    }
+                                }
+                            });
+                        }
+                    });
+                    table.addView(buttonVAMode);
+
+                    NumberPicker luminosity = new NumberPicker(context);
+                    luminosity.setId(R.id.luminosity);
+                    luminosity.setMinValue(300);
+                    luminosity.setMaxValue(1000);
+                    luminosity.setWrapSelectorWheel(false);
+                    DatabaseReference light = database.getReference().child("Seuil Luminosité");
+                    light.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (!task.isSuccessful()) {
+                                Log.e("Text luminosity", "error retrieving data luminosity", task.getException());
+                            }
+                            Object data = task.getResult().getValue();
+                            if (data instanceof Long) {
+                                Long long_data = (Long) data;
+                                int int_data = long_data.intValue();
+                                luminosity.setValue(int_data);
+                            } else {
+                                Log.e("Data type", "Unexpected data type " + data.getClass().getSimpleName() + "expected Long");
+                            }
+                        }
+                    });
+                    luminosity.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                        @Override
+                        public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                            light.setValue(newVal);
+                        }
+                    });
+                    table.addView(luminosity);
+
                     break;
                 case "Chauffage":
                     TextView textTemp = new TextView(context);

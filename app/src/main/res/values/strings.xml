@@ -51,9 +51,13 @@
     <item name="lightAutoModeToggle" type="id"/>
     <item name="temperatureValue" type="id"/>
     <item name="voletValue" type="id"/>
+    <item name="voletAutoToggle" type="id"/>
+    <item name="voletAutoModeToggle" type="id"/>
     <item name="flammeValue" type="id"/>
     <item name="mouvValue" type="id"/>
     <item name="heater" type="id"/>
     <item name="buttonHeater" type="id"/>
+    <item name="luminosity" type="id"/>
+
 
 </resources>
