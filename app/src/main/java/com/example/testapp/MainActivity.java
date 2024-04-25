@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         DatabaseReference database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
         ArrayList<String> roomCaptor = new ArrayList<String>() {};
         ArrayList<Object> roomCaptorData = new ArrayList<Object>() {};
+        String[] dataType = {"Action", "Détection", "Mode"};
         database.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -72,20 +73,24 @@ public class MainActivity extends AppCompatActivity {
                                                 Intent ia = new Intent(MainActivity.this, Manage_room.class);
                                                 try {
                                                     // on récup les données de la salle dans un JSONObject
-                                                    JSONObject inRoomData =  data.getJSONObject("Maison").getJSONObject(name).getJSONObject("Mesures");
-                                                    // on itère sur tous les capteurs présent dans la salle
-                                                    Iterator<String> inRoomCaptor = inRoomData.keys();
-                                                    ia.putExtra("name", name);
+                                                    for (String type : dataType) {
+                                                        JSONObject inRoomData =  data.getJSONObject("Maison").getJSONObject(name).getJSONObject(type);
+                                                        // on itère sur tous les capteurs présent dans la salle
+                                                        Iterator<String> inRoomCaptor = inRoomData.keys();
+                                                        Log.d("TESTTEST", String.valueOf(inRoomCaptor));
+                                                        ia.putExtra("name", name);
 
-                                                    while (inRoomCaptor.hasNext()) {
-                                                        String name = inRoomCaptor.next();
-                                                        roomCaptor.add(name);
-                                                        roomCaptorData.add(inRoomData.get(name));
+                                                        while (inRoomCaptor.hasNext()) {
+                                                            String name = inRoomCaptor.next();
+                                                            roomCaptor.add(name);
+                                                            roomCaptorData.add(inRoomData.get(name));
+                                                        }
+                                                        Log.d("DATA ROOM CAPTOR", String.valueOf(roomCaptor));
+                                                        ia.putExtra("roomCaptor", roomCaptor);
+                                                        ia.putExtra("roomCaptorData", (Serializable) roomCaptorData);
+                                                        Log.d("Value sent to manage", String.valueOf(roomCaptorData));
                                                     }
-                                                    Log.d("DATA ROOM CAPTOR", String.valueOf(roomCaptor));
-                                                    ia.putExtra("roomCaptor", roomCaptor);
-                                                    ia.putExtra("roomCaptorData", (Serializable) roomCaptorData);
-                                                    Log.d("Value sent to manage", String.valueOf(roomCaptorData));
+
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                 }

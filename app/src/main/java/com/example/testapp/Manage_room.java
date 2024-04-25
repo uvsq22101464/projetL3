@@ -41,12 +41,13 @@ public class Manage_room extends AppCompatActivity {
         Log.d("Layout selected", "manage_room");
 
         name = getIntent().getStringExtra("name");
+        String[] dataType = {"Action/", "Détection/", "Mode/"};
         TextView text = findViewById(R.id.name);
         text.setText(name);
         text.setTextSize(25);
         roomCaptor = getIntent().getStringArrayListExtra("roomCaptor");
         roomCaptorData = (ArrayList<?>) getIntent().getSerializableExtra("roomCaptorData");
-        database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Maison/" + name + "/Mesures/");
+        database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Maison/" + name);
         HashMap<String, Object> captorData = new HashMap<String, Object>();
         for (int i = 0; i < roomCaptor.size(); i++) {
             captorData.put(roomCaptor.get(i), roomCaptorData.get(i));
@@ -54,71 +55,63 @@ public class Manage_room extends AppCompatActivity {
 
         TableLayout table = (TableLayout) findViewById(R.id.table);
         initialize(captorData, table);
-
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (String captor : roomCaptor) {
-                    Object value = snapshot.child(captor).getValue();
-                    if (value != null) {
-                        switch (captor) {
-                            case "Lampes":
-                                ToggleButton buttonL = findViewById(R.id.lightToggle);
-                                buttonL.setChecked((boolean) value);
-                                break;
-                            case "Lampes automatiques":
-                                ToggleButton buttonLA = findViewById(R.id.lightAutoToggle);
-                                buttonLA.setChecked((boolean) value);
-                                break;
-                            case "Mode Lumière":
-                                ToggleButton buttonLAMode = findViewById(R.id.lightAutoModeToggle);
-                                buttonLAMode.setChecked((boolean) value);
-                                break;
-                            case "Alarme":
-                                ToggleButton buttonAlarm = findViewById(R.id.alarmToggle);
-                                buttonAlarm.setChecked((boolean) value);
-                                break;
-                            case "Détecteur de mouvement":
-                                Object checkAlarm = snapshot.child("Alarme").getValue();
-                                if ((boolean) value && (boolean) checkAlarm) {
-                                    //Envoie de la notif ici
-
-                                }
-                                break;
-                            case "Volets":
-                                ToggleButton buttonV = findViewById(R.id.voletValue);
-                                buttonV.setChecked((boolean) value);
-                                break;
-                            case "Volets automatiques":
-                                ToggleButton buttonVA = findViewById(R.id.voletAutoToggle);
-                                buttonVA.setChecked((boolean) value);
-                                break;
-                            case "Mode Volets":
-                                ToggleButton buttonVAMode = findViewById(R.id.voletAutoModeToggle);
-                                buttonVAMode.setChecked((boolean) value);
-                                break;
-                            case "Température":
-                                TextView textTemp = findViewById(R.id.temperatureValue);
-                                textTemp.setText("Température actuelle : " + value + " °C");
-                                break;
-                            case "Chauffage":
-                                ToggleButton heater = findViewById(R.id.buttonHeater);
-                                heater.setChecked((boolean) value);
-                                break;
-                            case "Détecteur de flamme":
-                                TextView textDF = findViewById(R.id.flammeValue);
-                                if ((boolean) value) {
-                                    textDF.setText(getString(R.string.flamme_on));
-                                    //
-                                    // envoyer notif ici ?
-                                    //
-                                } else {
-                                    textDF.setText(getString(R.string.flamme_off));
-                                }
-                                break;
+                    for (String type : dataType) {
+                    for (String captor : roomCaptor) {
+                        Object value = snapshot.child(type + captor).getValue();
+                        if (value != null) {
+                            switch (captor) {
+                                case "Lampes":
+                                    ToggleButton buttonL = findViewById(R.id.lightToggle);
+                                    buttonL.setChecked((boolean) value);
+                                    break;
+                                case "Lampes automatiques":
+                                    ToggleButton buttonLA = findViewById(R.id.lightAutoToggle);
+                                    buttonLA.setChecked((boolean) value);
+                                    break;
+                                case "Mode Lumière":
+                                    ToggleButton buttonLAMode = findViewById(R.id.lightAutoModeToggle);
+                                    buttonLAMode.setChecked((boolean) value);
+                                    break;
+                                case "Alarme":
+                                    ToggleButton buttonAlarm = findViewById(R.id.alarmToggle);
+                                    buttonAlarm.setChecked((boolean) value);
+                                    break;
+                                case "Volets":
+                                    ToggleButton buttonV = findViewById(R.id.voletValue);
+                                    buttonV.setChecked((boolean) value);
+                                    break;
+                                case "Volets automatiques":
+                                    ToggleButton buttonVA = findViewById(R.id.voletAutoToggle);
+                                    buttonVA.setChecked((boolean) value);
+                                    break;
+                                case "Mode Volets":
+                                    ToggleButton buttonVAMode = findViewById(R.id.voletAutoModeToggle);
+                                    buttonVAMode.setChecked((boolean) value);
+                                    break;
+                                case "Température":
+                                    TextView textTemp = findViewById(R.id.temperatureValue);
+                                    textTemp.setText("Température actuelle : " + value + " °C");
+                                    break;
+                                case "Chauffage":
+                                    ToggleButton heater = findViewById(R.id.buttonHeater);
+                                    heater.setChecked((boolean) value);
+                                    break;
+                                case "Détecteur de flamme":
+                                    TextView textDF = findViewById(R.id.flammeValue);
+                                    if ((boolean) value) {
+                                        textDF.setText(getString(R.string.flamme_on));
+                                    } else {
+                                        textDF.setText(getString(R.string.flamme_off));
+                                    }
+                                    break;
+                            }
                         }
                     }
                 }
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -150,7 +143,7 @@ public class Manage_room extends AppCompatActivity {
                     buttonL.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DatabaseReference databaseRef = database.getReference( "Maison/" + name + "/Mesures/Lampes");
+                            DatabaseReference databaseRef = database.getReference( "Maison/" + name + "/Action/Lampes");
                             databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -180,7 +173,7 @@ public class Manage_room extends AppCompatActivity {
                     buttonLA.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DatabaseReference databaseRef = database.getReference( "Maison/" + name + "/Mesures");
+                            DatabaseReference databaseRef = database.getReference( "Maison/" + name + "/Mode");
                             databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -218,7 +211,7 @@ public class Manage_room extends AppCompatActivity {
                     buttonLAMode.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DatabaseReference databaseRef = database.getReference( "Maison/" + name + "/Mesures/Mode Lumière");
+                            DatabaseReference databaseRef = database.getReference( "Maison/" + name + "/Mode/Mode Lumière");
                             databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -247,7 +240,7 @@ public class Manage_room extends AppCompatActivity {
                     alarm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DatabaseReference alarmRef = database.getReference("Maison/" + name + "/Mesures/Alarme");
+                            DatabaseReference alarmRef = database.getReference("Maison/" + name + "/Action/Alarme");
                             alarmRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -276,7 +269,7 @@ public class Manage_room extends AppCompatActivity {
                     buttonV.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DatabaseReference databaseRef = database.getReference("Maison/" + name + "/Mesures/Volets");
+                            DatabaseReference databaseRef = database.getReference("Maison/" + name + "/Action/Volets");
                             databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -305,7 +298,7 @@ public class Manage_room extends AppCompatActivity {
                     buttonVA.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DatabaseReference databaseRef = database.getReference( "Maison/" + name + "/Mesures");
+                            DatabaseReference databaseRef = database.getReference( "Maison/" + name + "/Mode");
                             databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -343,7 +336,7 @@ public class Manage_room extends AppCompatActivity {
                     buttonVAMode.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DatabaseReference databaseRef = database.getReference( "Maison/" + name + "/Mesures/Mode Volets");
+                            DatabaseReference databaseRef = database.getReference( "Maison/" + name + "/Mode/Mode Volets");
                             databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -398,7 +391,7 @@ public class Manage_room extends AppCompatActivity {
                 case "Chauffage":
                     TextView textTemp = new TextView(context);
                     textTemp.setId(R.id.temperatureValue);
-                    DatabaseReference temp = database.getReference("Maison/" + name + "/Mesures/Température");
+                    DatabaseReference temp = database.getReference("Maison/" + name + "/Détection/Température");
                     temp.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -449,7 +442,7 @@ public class Manage_room extends AppCompatActivity {
                     buttonHeater.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DatabaseReference heaterRef = database.getReference("Maison/" + name + "/Mesures/Chauffage");
+                            DatabaseReference heaterRef = database.getReference("Maison/" + name + "/Action/Chauffage");
                             heaterRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -473,7 +466,7 @@ public class Manage_room extends AppCompatActivity {
                 case "Détecteur de flamme":
                     TextView textDF = new TextView(context);
                     textDF.setId(R.id.flammeValue);
-                    DatabaseReference flamme = database.getReference("Maison/" + name + "/Mesures/Détecteur de flamme");
+                    DatabaseReference flamme = database.getReference("Maison/" + name + "/Détection/Détecteur de flamme");
                     flamme.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -484,8 +477,6 @@ public class Manage_room extends AppCompatActivity {
                             if (data instanceof Boolean) {
                                 if ((boolean) data) {
                                     textDF.setText(getString(R.string.flamme_on));
-                                    //
-                                    // déclencher une notif ?
                                 } else {
                                     textDF.setText(getString(R.string.flamme_off));
                                 }
@@ -499,7 +490,7 @@ public class Manage_room extends AppCompatActivity {
                 case "Détecteur de mouvement":
                     TextView textDM = new TextView(context);
                     textDM.setId(R.id.mouvValue);
-                    DatabaseReference mouv = database.getReference("Maison/" + name + "/Mesures/Détecteur de mouvement");
+                    DatabaseReference mouv = database.getReference("Maison/" + name + "/Détection/Détecteur de mouvement");
                     mouv.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -510,8 +501,6 @@ public class Manage_room extends AppCompatActivity {
                             if (data instanceof Boolean) {
                                 if ((boolean) data) {
                                     textDM.setText(getString(R.string.mouv_on));
-                                    //
-                                    // déclencher une notif ?
                                 } else {
                                     textDM.setText(getString(R.string.mouv_off));
                                 }

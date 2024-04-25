@@ -46,33 +46,33 @@ public class AddRoom extends AppCompatActivity {
                 FirebaseDatabase database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/");
                 for (Spinner spinner : spinners) {
                     String captor = (spinner.getItemAtPosition(spinner.getSelectedItemPosition()).toString());
-                    DatabaseReference myRef = database.getReference("Maison/" + name_selected + "/Mesures/" + captor);
+                    DatabaseReference myRef = database.getReference("Maison/" + name_selected);
                     switch (captor) {
                         case "Lampes":
-                            myRef.setValue(false);
+                            myRef.child("Action/" + captor).setValue(false);
                             break;
                         case "Lampes automatiques":
-                            myRef.setValue(false);
-                            database.getReference("Maison/" + name_selected + "/Mesures/Détecteur de mouvement").setValue(false);
-                            database.getReference("Maison/" + name_selected + "/Mesures/Mode Lumière").setValue(true);
-                            database.getReference("Maison/" + name_selected + "/Mesures/Alarme").setValue(false);
+                            myRef.child("Action/" + captor).setValue(false);
+                            myRef.child("Détection/Détecteur de mouvement").setValue(false);
+                            myRef.child("Mode/Mode Lumière").setValue(true);
+                            myRef.child("Action/Alarme").setValue(false);
                             break;
                         case "Volets":
-                            myRef.setValue(false);
+                            myRef.child("Action/" + captor).setValue(false);
                             break;
                         case "Volets automatiques":
-                            myRef.setValue(false);
-                            database.getReference("Maison/" + name_selected + "/Mesures/Luminosité").setValue(0);
-                            database.getReference("Maison/" + name_selected + "/Mesures/Mode Volets").setValue(true);
+                            myRef.child("Action/" + captor).setValue(false);
+                            myRef.child("Détection/Luminosité").setValue(0);
+                            myRef.child("Mode/Mode Volets").setValue(true);
                             database.getReference(getString(R.string.seuilLum)).setValue(600);
                             break;
                         case "Chauffage":
-                            myRef.setValue(false);
-                            database.getReference("Maison/" + name_selected + "/Mesures/Température").setValue(0);
+                            myRef.child("Action/" + captor).setValue(false);
+                            myRef.child("Détection/Température").setValue(0);
                             database.getReference("Température de chauffage").setValue(20);
                             break;
                         case "Détecteur de flamme":
-                            myRef.setValue(false);
+                            myRef.child("Détection/" + captor).setValue(false);
                             database.getReference(getString(R.string.seuilFlamme)).setValue(1000);
                             break;
                     }
