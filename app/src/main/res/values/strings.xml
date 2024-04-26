@@ -18,10 +18,10 @@
     <string name="toolbar3">Plannings</string>
     <string name="toolbar4">Température</string>
     <string name="temperature">Température</string>
-    <string name="lampes_off">Eteint</string>
-    <string name="lampes_on">Allumé</string>
-    <string name="volets_off">Fermé</string>
-    <string name="volets_on">Ouvert</string>
+    <string name="lampe_off">Eteint</string>
+    <string name="lampe_on">Allumé</string>
+    <string name="volet_off">Fermé</string>
+    <string name="volet_on">Ouvert</string>
     <string name="flamme_off">Pas de flamme détecté</string>
     <string name="flamme_on">Flamme détecté</string>
     <string name="mouv_off">Aucun mouvement détecté</string>
@@ -30,20 +30,25 @@
     <string name="mode_off">Désactivé</string>
     <string name="delete">Supprimer</string>
     <string name="seuilLum">Seuil Luminosité</string>
+    <string name="seuiltemp">Seuil Température</string>
     <string name="detec_mouv_lum">Détecteur de mouvement lumière</string>
     <string name="seuilFlamme">Seuil Flamme</string>
     <string name="mode_auto_off">Mode automatique désactivé</string>
     <string name="mode_auto_on">Mode automatique activé</string>
     <string name="heater_on">Chauffage activé</string>
     <string name="heater_off">Chauffage désactivé</string>
+    <string name="heater_auto_on">Chauffage automatique activé</string>
+    <string name="heater_auto_off">Chauffage automatique désactivé</string>
     <string name="alarm_on">Alarme activée</string>
     <string name="alarm_off">Alarme désactivée</string>
+    <string name="traveller_on">Mode voyage activé</string>
+    <string name="traveller_off">Mode voyage désactivé</string>
 
     <string-array name="captors">
-        <item>Lampes</item>
-        <item>Lampes automatiques</item>
-        <item>Volets</item>
-        <item>Volets automatiques</item>
+        <item>Lampe</item>
+        <item>Lampe automatique</item>
+        <item>Volet</item>
+        <item>Volet automatique</item>
         <item>Chauffage</item>
         <item>Détecteur de flamme</item>
     </string-array>
@@ -61,6 +66,8 @@
     <item name="buttonHeater" type="id"/>
     <item name="luminosity" type="id"/>
     <item name="alarmToggle" type="id"/>
+    <item name="heaterAuto" type="id"/>
+    <item name="travellerToggle" type="id"/>
 
 
 </resources>

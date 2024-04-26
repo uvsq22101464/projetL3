@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.NumberPicker;
+import android.widget.SeekBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -24,7 +25,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class Manage_room extends AppCompatActivity {
 
@@ -58,38 +61,49 @@ public class Manage_room extends AppCompatActivity {
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (String type : dataType) {
+                for (String type : dataType) {
                     for (String captor : roomCaptor) {
                         Object value = snapshot.child(type + captor).getValue();
                         if (value != null) {
                             switch (captor) {
-                                case "Lampes":
+                                case "Lampe":
                                     ToggleButton buttonL = findViewById(R.id.lightToggle);
                                     buttonL.setChecked((boolean) value);
                                     break;
-                                case "Lampes automatiques":
-                                    ToggleButton buttonLA = findViewById(R.id.lightAutoToggle);
-                                    buttonLA.setChecked((boolean) value);
-                                    break;
-                                case "Mode Lumière":
+                                case "Lampe automatique":
                                     ToggleButton buttonLAMode = findViewById(R.id.lightAutoModeToggle);
                                     buttonLAMode.setChecked((boolean) value);
+                                    //if ((boolean) value) {
+                                    //    Toast.makeText(Manage_room.this, getString(R.string.mode_auto_on), Toast.LENGTH_SHORT).show();
+                                    //} else {
+                                    //    Toast.makeText(Manage_room.this, getString(R.string.mode_auto_off), Toast.LENGTH_SHORT).show();
+                                    //}
+                                    break;
+                                case "ModeVoyageur":
+                                    ToggleButton traveller = findViewById(R.id.travellerToggle);
+                                    traveller.setChecked((boolean) value);
+                                    //if ((boolean) value) {
+                                    //    Toast.makeText(Manage_room.this, getString(R.string.mode_auto_on), Toast.LENGTH_SHORT).show();
+                                    //} else {
+                                    //    Toast.makeText(Manage_room.this, getString(R.string.mode_auto_off), Toast.LENGTH_SHORT).show();
+                                    //}
                                     break;
                                 case "Alarme":
                                     ToggleButton buttonAlarm = findViewById(R.id.alarmToggle);
                                     buttonAlarm.setChecked((boolean) value);
                                     break;
-                                case "Volets":
+                                case "Volet":
                                     ToggleButton buttonV = findViewById(R.id.voletValue);
                                     buttonV.setChecked((boolean) value);
                                     break;
-                                case "Volets automatiques":
-                                    ToggleButton buttonVA = findViewById(R.id.voletAutoToggle);
-                                    buttonVA.setChecked((boolean) value);
-                                    break;
-                                case "Mode Volets":
+                                case "Volet automatique":
                                     ToggleButton buttonVAMode = findViewById(R.id.voletAutoModeToggle);
                                     buttonVAMode.setChecked((boolean) value);
+                                    //if ((boolean) value) {
+                                    //    Toast.makeText(Manage_room.this, getString(R.string.mode_auto_on), Toast.LENGTH_SHORT).show();
+                                    //} else {
+                                    //    Toast.makeText(Manage_room.this, getString(R.string.mode_auto_off), Toast.LENGTH_SHORT).show();
+                                    //}
                                     break;
                                 case "Température":
                                     TextView textTemp = findViewById(R.id.temperatureValue);
@@ -99,7 +113,16 @@ public class Manage_room extends AppCompatActivity {
                                     ToggleButton heater = findViewById(R.id.buttonHeater);
                                     heater.setChecked((boolean) value);
                                     break;
-                                case "Détecteur de flamme":
+                                case "Chauffage automatique":
+                                    ToggleButton heaterAuto = findViewById(R.id.heaterAuto);
+                                    heaterAuto.setChecked((boolean) value);
+                                    //if ((boolean) value) {
+                                    //Toast.makeText(Manage_room.this, getString(R.string.mode_auto_on), Toast.LENGTH_SHORT).show();
+                                    //} else {
+                                    //    Toast.makeText(Manage_room.this, getString(R.string.mode_auto_off), Toast.LENGTH_SHORT).show();
+                                    //}
+                                    break;
+                                case "Flamme":
                                     TextView textDF = findViewById(R.id.flammeValue);
                                     if ((boolean) value) {
                                         textDF.setText(getString(R.string.flamme_on));
@@ -111,7 +134,6 @@ public class Manage_room extends AppCompatActivity {
                         }
                     }
                 }
-
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -124,7 +146,9 @@ public class Manage_room extends AppCompatActivity {
     private void initialize(HashMap<String, Object> map, TableLayout table) {
         // met les données de base dans la table
         TableRow.LayoutParams parameter = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT);
-        for (String keys : map.keySet()) {
+        List<String> keySet = new ArrayList<>(map.keySet());
+        Collections.sort(keySet, Collections.reverseOrder());
+        for (String keys : keySet) {
             TextView text = new TextView(context);
             text.setText(keys);
             text.setLayoutParams(parameter);
@@ -134,66 +158,39 @@ public class Manage_room extends AppCompatActivity {
             Log.d("Affiche Keys", keys);
             FirebaseDatabase database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/");
             switch (keys) {
-                case "Lampes":
-                    ToggleButton buttonL = new ToggleButton(context);
-                    buttonL.setId(R.id.lightToggle);
-                    buttonL.setChecked((Boolean) map.get(keys));
-                    buttonL.setTextOff(getString(R.string.lampes_off));
-                    buttonL.setTextOn(getString(R.string.lampes_on));
-                    buttonL.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            DatabaseReference databaseRef = database.getReference( "Maison/" + name + "/Action/Lampes");
-                            databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                    if (!task.isSuccessful()) {
-                                        Log.e("Toggle Button", "error retrieving data", task.getException());
-                                    }
-                                    Object data = task.getResult().getValue();
-                                    if (data instanceof Boolean) {
-                                        boolean value = (Boolean) data;
-                                        databaseRef.setValue(!value);
-                                    } else {
-                                        Log.e("Toggle Button", "unexpected value type : " + data.getClass().getSimpleName());
-                                    }
-                                }
-                            });
-                        }
-                    });
-                    table.addView(buttonL);
-                    break;
-                case "Lampes automatiques":
+                case "Lampe automatique":
                     // création du bouton pour forcer l'activation des lampes
                     ToggleButton buttonLA = new ToggleButton(context);
-                    buttonLA.setId(R.id.lightAutoToggle);
+                    buttonLA.setId(R.id.lightToggle);
                     buttonLA.setChecked((Boolean) map.get(keys));
-                    buttonLA.setTextOff(getString(R.string.lampes_off));
-                    buttonLA.setTextOn(getString(R.string.lampes_on));
+                    buttonLA.setTextOff(getString(R.string.lampe_off));
+                    buttonLA.setTextOn(getString(R.string.lampe_on));
                     buttonLA.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DatabaseReference databaseRef = database.getReference( "Maison/" + name + "/Mode");
+                            DatabaseReference databaseRef = database.getReference( "Maison/" + name);
                             databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                // On désactive le mode
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                    Object mode_data = task.getResult().child("Mode Lumière").getValue();
+                                    Object mode_data = task.getResult().child("Mode/Lampe automatique").getValue();
                                     if ((boolean) mode_data) {
-                                        databaseRef.child("Mode Lumière").setValue(false);
+                                        databaseRef.child("Mode/Lampe automatique").setValue(false);
                                         Toast.makeText(Manage_room.this, getString(R.string.mode_auto_off), Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
                             databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                // On change la valeur de la lampe
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
                                     if (!task.isSuccessful()) {
                                         Log.e("Toggle Button", "error retrieving data", task.getException());
                                     }
-                                    Object data = task.getResult().child("Lampes automatiques").getValue();
+                                    Object data = task.getResult().child("Action/Lampe").getValue();
                                     if (data instanceof Boolean) {
                                         boolean value = (Boolean) data;
-                                        databaseRef.child("Lampes automatiques").setValue(!value);
+                                        databaseRef.child("Action/Lampe").setValue(!value);
                                     } else {
                                         Log.e("Toggle Button", "unexpected value type : " + data.getClass().getSimpleName());
                                     }
@@ -205,13 +202,13 @@ public class Manage_room extends AppCompatActivity {
                     // création du bouton pour changer le mode
                     ToggleButton buttonLAMode = new ToggleButton(context);
                     buttonLAMode.setId(R.id.lightAutoModeToggle);
-                    buttonLAMode.setChecked((Boolean) map.get("Mode Lumière"));
+                    buttonLAMode.setChecked((Boolean) map.get("Lampe automatique"));
                     buttonLAMode.setTextOff(getString(R.string.mode_off));
                     buttonLAMode.setTextOn(getString(R.string.mode_on));
                     buttonLAMode.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DatabaseReference databaseRef = database.getReference( "Maison/" + name + "/Mode/Mode Lumière");
+                            DatabaseReference databaseRef = database.getReference( "Maison/" + name + "/Mode/Lampe automatique");
                             databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -222,7 +219,6 @@ public class Manage_room extends AppCompatActivity {
                                     if (data instanceof Boolean) {
                                         boolean value = (Boolean) data;
                                         databaseRef.setValue(!value);
-                                        Toast.makeText(Manage_room.this, getString(R.string.mode_auto_on), Toast.LENGTH_SHORT).show();
                                     } else {
                                         Log.e("Toggle Button", "unexpected value type : " + data.getClass().getSimpleName());
                                     }
@@ -232,49 +228,23 @@ public class Manage_room extends AppCompatActivity {
                     });
                     table.addView(buttonLAMode);
 
-                    ToggleButton alarm = new ToggleButton(context);
-                    alarm.setId(R.id.alarmToggle);
-                    alarm.setChecked((boolean) map.get("Alarme"));
-                    alarm.setTextOn(getString(R.string.alarm_on));
-                    alarm.setTextOff(getString(R.string.alarm_off));
-                    alarm.setOnClickListener(new View.OnClickListener() {
+                    //
+                    // changer alarme en mode voyageur
+                    //
+                    ToggleButton traveller = new ToggleButton(context);
+                    traveller.setId(R.id.travellerToggle);
+                    traveller.setChecked((boolean) map.get("ModeVoyageur"));
+                    traveller.setTextOn(getString(R.string.traveller_on));
+                    traveller.setTextOff(getString(R.string.traveller_off));
+                    traveller.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DatabaseReference alarmRef = database.getReference("Maison/" + name + "/Action/Alarme");
-                            alarmRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                    if (!task.isSuccessful()) {
-                                        Log.e("Toggle Button", "error retrieving data Alarm", task.getException());
-                                    }
-                                    Object data = task.getResult().getValue();
-                                    if (data instanceof Boolean) {
-                                        boolean value = (Boolean) data;
-                                        alarmRef.setValue(!value);
-                                    } else {
-                                        Log.e("Toggle Button", "unexpected value type : " + data.getClass().getSimpleName());
-                                    }
-                                }
-                            });
-                        }
-                    });
-                    table.addView(alarm);
-                    break;
-                case "Volets":
-                    ToggleButton buttonV = new ToggleButton(context);
-                    buttonV.setId(R.id.voletValue);
-                    buttonV.setChecked((Boolean) map.get(keys));
-                    buttonV.setTextOff(getString(R.string.volets_off));
-                    buttonV.setTextOn(getString(R.string.volets_on));
-                    buttonV.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            DatabaseReference databaseRef = database.getReference("Maison/" + name + "/Action/Volets");
+                            DatabaseReference databaseRef = database.getReference("Maison/" + name + "/ModeVoyageur");
                             databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
                                     if (!task.isSuccessful()) {
-                                        Log.e("Toggle Button", "error retrieving data Volets", task.getException());
+                                        Log.e("Toggle Button", "error retrieving data", task.getException());
                                     }
                                     Object data = task.getResult().getValue();
                                     if (data instanceof Boolean) {
@@ -287,38 +257,71 @@ public class Manage_room extends AppCompatActivity {
                             });
                         }
                     });
-                    table.addView(buttonV);
+                    table.addView(traveller);
                     break;
-                case "Volets automatiques":
+                case "Lampe":
+                    if (findViewById(R.id.lightToggle) == null) {
+                        ToggleButton buttonL = new ToggleButton(context);
+                        buttonL.setId(R.id.lightToggle);
+                        buttonL.setChecked((Boolean) map.get(keys));
+                        buttonL.setTextOff(getString(R.string.lampe_off));
+                        buttonL.setTextOn(getString(R.string.lampe_on));
+                        buttonL.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                DatabaseReference databaseRef = database.getReference( "Maison/" + name + "/Action/Lampe");
+                                databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                        if (!task.isSuccessful()) {
+                                            Log.e("Toggle Button", "error retrieving data", task.getException());
+                                        }
+                                        Object data = task.getResult().getValue();
+                                        if (data instanceof Boolean) {
+                                            boolean value = (Boolean) data;
+                                            databaseRef.setValue(!value);
+                                        } else {
+                                            Log.e("Toggle Button", "unexpected value type : " + data.getClass().getSimpleName());
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        table.addView(buttonL);
+                    }
+                    break;
+                case "Volet automatique":
                     ToggleButton buttonVA = new ToggleButton(context);
-                    buttonVA.setId(R.id.voletAutoToggle);
+                    buttonVA.setId(R.id.voletValue);
                     buttonVA.setChecked((Boolean) map.get(keys));
-                    buttonVA.setTextOff(getString(R.string.volets_off));
-                    buttonVA.setTextOn(getString(R.string.volets_on));
+                    buttonVA.setTextOff(getString(R.string.volet_off));
+                    buttonVA.setTextOn(getString(R.string.volet_on));
                     buttonVA.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DatabaseReference databaseRef = database.getReference( "Maison/" + name + "/Mode");
+                            DatabaseReference databaseRef = database.getReference( "Maison/" + name);
+                            // On désactive le mode auto
                             databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                    Object mode_data = task.getResult().child("Mode Volets").getValue();
+                                    Object mode_data = task.getResult().child("Mode/Volet automatique").getValue();
                                     if ((boolean) mode_data) {
-                                        databaseRef.child("Mode Volets").setValue(false);
+                                        databaseRef.child("Mode/Volet automatique").setValue(false);
                                         Toast.makeText(Manage_room.this, getString(R.string.mode_auto_off), Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
+                            // On modifie la valeur des volets
                             databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
                                     if (!task.isSuccessful()) {
                                         Log.e("Toggle Button", "error retrieving data", task.getException());
                                     }
-                                    Object data = task.getResult().child("Volets automatiques").getValue();
+                                    Object data = task.getResult().child("Action/Volet").getValue();
                                     if (data instanceof Boolean) {
                                         boolean value = (Boolean) data;
-                                        databaseRef.child("Volets automatiques").setValue(!value);
+                                        databaseRef.child("Action/Volet").setValue(!value);
                                     } else {
                                         Log.e("Toggle Button", "unexpected value type : " + data.getClass().getSimpleName());
                                     }
@@ -327,16 +330,16 @@ public class Manage_room extends AppCompatActivity {
                         }
                     });
                     table.addView(buttonVA);
-                    // création du bouton pour changer le mode
+                    // création du bouton pour changer le mode des volets
                     ToggleButton buttonVAMode = new ToggleButton(context);
                     buttonVAMode.setId(R.id.voletAutoModeToggle);
-                    buttonVAMode.setChecked((Boolean) map.get("Mode Volets"));
+                    buttonVAMode.setChecked((Boolean) map.get("Volet automatique"));
                     buttonVAMode.setTextOff(getString(R.string.mode_off));
                     buttonVAMode.setTextOn(getString(R.string.mode_on));
                     buttonVAMode.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DatabaseReference databaseRef = database.getReference( "Maison/" + name + "/Mode/Mode Volets");
+                            DatabaseReference databaseRef = database.getReference( "Maison/" + name + "/Mode/Volet automatique");
                             databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -347,7 +350,6 @@ public class Manage_room extends AppCompatActivity {
                                     if (data instanceof Boolean) {
                                         boolean value = (Boolean) data;
                                         databaseRef.setValue(!value);
-                                        Toast.makeText(Manage_room.this, getString(R.string.mode_auto_on), Toast.LENGTH_SHORT).show();
                                     } else {
                                         Log.e("Toggle Button", "unexpected value type : " + data.getClass().getSimpleName());
                                     }
@@ -357,11 +359,9 @@ public class Manage_room extends AppCompatActivity {
                     });
                     table.addView(buttonVAMode);
 
-                    NumberPicker luminosity = new NumberPicker(context);
+                    SeekBar luminosity = new SeekBar(context);
                     luminosity.setId(R.id.luminosity);
-                    luminosity.setMinValue(300);
-                    luminosity.setMaxValue(1000);
-                    luminosity.setWrapSelectorWheel(false);
+                    luminosity.setMax(1000);
                     DatabaseReference light = database.getReference().child("Seuil Luminosité");
                     light.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
@@ -373,20 +373,59 @@ public class Manage_room extends AppCompatActivity {
                             if (data instanceof Long) {
                                 Long long_data = (Long) data;
                                 int int_data = long_data.intValue();
-                                luminosity.setValue(int_data);
+                                luminosity.setProgress(int_data);
                             } else {
                                 Log.e("Data type", "Unexpected data type " + data.getClass().getSimpleName() + "expected Long");
                             }
                         }
                     });
-                    luminosity.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                    // ajout un textview pour voir la visualisation des données de la barre
+                    luminosity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                         @Override
-                        public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                            light.setValue(newVal);
+                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {}
+
+                        @Override
+                        public void onStartTrackingTouch(SeekBar seekBar) {}
+
+                        @Override
+                        public void onStopTrackingTouch(SeekBar seekBar) {
+                            light.setValue(seekBar.getProgress());
                         }
                     });
+
                     table.addView(luminosity);
 
+                    break;
+                case "Volet":
+                    if (findViewById(R.id.voletValue) == null) {
+                        ToggleButton buttonV = new ToggleButton(context);
+                        buttonV.setId(R.id.voletValue);
+                        buttonV.setChecked((Boolean) map.get(keys));
+                        buttonV.setTextOff(getString(R.string.volet_off));
+                        buttonV.setTextOn(getString(R.string.volet_on));
+                        buttonV.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                DatabaseReference databaseRef = database.getReference("Maison/" + name + "/Action/Volet");
+                                databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                        if (!task.isSuccessful()) {
+                                            Log.e("Toggle Button", "error retrieving data Volet", task.getException());
+                                        }
+                                        Object data = task.getResult().getValue();
+                                        if (data instanceof Boolean) {
+                                            boolean value = (Boolean) data;
+                                            databaseRef.setValue(!value);
+                                        } else {
+                                            Log.e("Toggle Button", "unexpected value type : " + data.getClass().getSimpleName());
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        table.addView(buttonV);
+                    }
                     break;
                 case "Chauffage":
                     TextView textTemp = new TextView(context);
@@ -409,7 +448,7 @@ public class Manage_room extends AppCompatActivity {
                     heater.setMinValue(0);
                     heater.setMaxValue(40);
                     heater.setWrapSelectorWheel(false);
-                    DatabaseReference heat = database.getReference().child("Température de chauffage");
+                    DatabaseReference heat = database.getReference().child("Seuil Température");
                     heat.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -442,17 +481,28 @@ public class Manage_room extends AppCompatActivity {
                     buttonHeater.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DatabaseReference heaterRef = database.getReference("Maison/" + name + "/Action/Chauffage");
+                            DatabaseReference heaterRef = database.getReference("Maison/" + name );
+                            // On désactive le mode auto
+                            heaterRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    Object mode_data = task.getResult().child("Mode/Chauffage automatique").getValue();
+                                    if ((boolean) mode_data) {
+                                        heaterRef.child("Mode/Chauffage automatique").setValue(false);
+                                        Toast.makeText(Manage_room.this, getString(R.string.mode_auto_off), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                             heaterRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
                                     if (!task.isSuccessful()) {
                                         Log.e("Data chauffage", "error retrieving data Chauffage");
                                     }
-                                    Object data = task.getResult().getValue();
+                                    Object data = task.getResult().child("Action/Chauffage").getValue();
                                     if (data instanceof Boolean) {
                                         boolean value = (Boolean) data;
-                                        heaterRef.setValue(!value);
+                                        heaterRef.child("Action/Chauffage").setValue(!value);
                                     } else {
                                         Log.e("Toggle Button", "unexpected value type : " + data.getClass().getSimpleName());
                                     }
@@ -460,13 +510,40 @@ public class Manage_room extends AppCompatActivity {
                             });
                         }
                     });
-
                     table.addView(buttonHeater);
+
+                    ToggleButton heaterAuto = new ToggleButton(context);
+                    heaterAuto.setId(R.id.heaterAuto);
+                    heaterAuto.setChecked((boolean) map.get("Chauffage automatique"));
+                    heaterAuto.setTextOn(getString(R.string.mode_on));
+                    heaterAuto.setTextOff(getString(R.string.mode_off));
+                    heaterAuto.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DatabaseReference heaterAutoRef = database.getReference("Maison/" + name + "/Mode/Chauffage automatique");
+                            heaterAutoRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    if (!task.isSuccessful()) {
+                                        Log.e("Data chauffage auto", "error retrieving data chauffage auto");
+                                    }
+                                    Object data = task.getResult().getValue();
+                                    if (data instanceof Boolean) {
+                                        boolean value = (boolean) data;
+                                        heaterAutoRef.setValue(!value);
+                                    } else {
+                                        Log.e("Toggle Button", "unexpected valur type : " + data.getClass().getSimpleName());
+                                    }
+                                }
+                            });
+                        }
+                    });
+                    table.addView(heaterAuto);
                     break;
-                case "Détecteur de flamme":
+                case "Flamme":
                     TextView textDF = new TextView(context);
                     textDF.setId(R.id.flammeValue);
-                    DatabaseReference flamme = database.getReference("Maison/" + name + "/Détection/Détecteur de flamme");
+                DatabaseReference flamme = database.getReference("Maison/" + name + "/Détection/Flamme");
                     flamme.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -486,11 +563,38 @@ public class Manage_room extends AppCompatActivity {
                         }
                     });
                     table.addView(textDF);
+                    ToggleButton alarm = new ToggleButton(context);
+                    alarm.setId(R.id.alarmToggle);
+                    alarm.setChecked((boolean) map.get("Alarme"));
+                    alarm.setTextOn(getString(R.string.alarm_on));
+                    alarm.setTextOff(getString(R.string.alarm_off));
+                    alarm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DatabaseReference alarmRef = database.getReference("Maison/" + name + "/Action/Alarme");
+                            alarmRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    if (!task.isSuccessful()) {
+                                        Log.e("Toggle Button", "error retrieving data Alarm", task.getException());
+                                    }
+                                    Object data = task.getResult().getValue();
+                                    if (data instanceof Boolean) {
+                                        boolean value = (Boolean) data;
+                                        alarmRef.setValue(!value);
+                                    } else {
+                                        Log.e("Toggle Button", "unexpected value type : " + data.getClass().getSimpleName());
+                                    }
+                                }
+                            });
+                        }
+                    });
+                    table.addView(alarm);
                     break;
-                case "Détecteur de mouvement":
+                case "Mouvement":
                     TextView textDM = new TextView(context);
                     textDM.setId(R.id.mouvValue);
-                    DatabaseReference mouv = database.getReference("Maison/" + name + "/Détection/Détecteur de mouvement");
+                    DatabaseReference mouv = database.getReference("Maison/" + name + "/Détection/Mouvement");
                     mouv.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {

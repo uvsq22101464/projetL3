@@ -48,31 +48,33 @@ public class AddRoom extends AppCompatActivity {
                     String captor = (spinner.getItemAtPosition(spinner.getSelectedItemPosition()).toString());
                     DatabaseReference myRef = database.getReference("Maison/" + name_selected);
                     switch (captor) {
-                        case "Lampes":
+                        case "Lampe":
                             myRef.child("Action/" + captor).setValue(false);
                             break;
-                        case "Lampes automatiques":
-                            myRef.child("Action/" + captor).setValue(false);
-                            myRef.child("Détection/Détecteur de mouvement").setValue(false);
-                            myRef.child("Mode/Mode Lumière").setValue(true);
-                            myRef.child("Action/Alarme").setValue(false);
+                        case "Lampe automatique":
+                            myRef.child("Action/Lampe").setValue(false);
+                            myRef.child("Détection/Mouvement").setValue(false);
+                            myRef.child("Mode/Lampe automatique").setValue(true);
+                            myRef.child("Mode/ModeVoyageur").setValue(false);
                             break;
-                        case "Volets":
+                        case "Volet":
                             myRef.child("Action/" + captor).setValue(false);
                             break;
-                        case "Volets automatiques":
-                            myRef.child("Action/" + captor).setValue(false);
+                        case "Volet automatique":
+                            myRef.child("Action/Volet").setValue(false);
                             myRef.child("Détection/Luminosité").setValue(0);
-                            myRef.child("Mode/Mode Volets").setValue(true);
+                            myRef.child("Mode/Volet automatique").setValue(true);
                             database.getReference(getString(R.string.seuilLum)).setValue(600);
                             break;
                         case "Chauffage":
                             myRef.child("Action/" + captor).setValue(false);
                             myRef.child("Détection/Température").setValue(0);
-                            database.getReference("Température de chauffage").setValue(20);
+                            myRef.child("Mode/Chauffage automatique").setValue(true);
+                            database.getReference(getString(R.string.seuiltemp)).setValue(20);
                             break;
                         case "Détecteur de flamme":
-                            myRef.child("Détection/" + captor).setValue(false);
+                            myRef.child("Détection/Flamme").setValue(false);
+                            myRef.child("Action/Alarme").setValue(false);
                             database.getReference(getString(R.string.seuilFlamme)).setValue(1000);
                             break;
                     }
