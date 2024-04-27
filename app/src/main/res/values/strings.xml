@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TestApp</string>
+    <string name="app_name">Domotix</string>
     <string name="Bonjour">Bonjour tout le monde</string>
     <string name="menu_gestion">Vue gestion</string>
     <string name="retour">Back</string>
