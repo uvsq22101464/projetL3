@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             Log.e("JSON data", String.valueOf(task.getResult()));
                             JSONObject data = new JSONObject(convert(task.getResult().getValue()));
-
                                 try {
                                     JSONObject roomData = data.getJSONObject("Maison");
                                     Iterator<String> roomNames = roomData.keys();
@@ -77,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
                                                         JSONObject inRoomData =  data.getJSONObject("Maison").getJSONObject(name).getJSONObject(type);
                                                         // on itère sur tous les capteurs présent dans la salle
                                                         Iterator<String> inRoomCaptor = inRoomData.keys();
-                                                        Log.d("TESTTEST", String.valueOf(inRoomCaptor));
                                                         ia.putExtra("name", name);
 
                                                         while (inRoomCaptor.hasNext()) {
@@ -119,7 +117,8 @@ public class MainActivity extends AppCompatActivity {
         }
     public static String convert(Object data) {
         // fonction qui permet de convertir les données contenu dans le datasnaphot en y ajoutant des "" pour pouvoir les transformer plus tard en JSON
-        return data.toString().replaceAll("(\\b[\\w\\s]+)(?=[=:])(?=[=:])", "\"$1\"");
+        Object temp = data.toString().replaceAll("(\\b[\\w\\s]+)(?==)(?==)", "\"$1\"");
+        return temp.toString().replaceAll("(\\b[\\d\\s:/]+)(?=[}])(?=[}])", "\"$1\"");
     }
 
     public void addRoom(View v) {

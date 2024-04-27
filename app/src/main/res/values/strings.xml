@@ -43,14 +43,18 @@
     <string name="alarm_off">Alarme désactivée</string>
     <string name="traveller_on">Mode voyage activé</string>
     <string name="traveller_off">Mode voyage désactivé</string>
+    <string name="porte_connectee">Porte connectée</string>
 
     <string-array name="captors">
         <item>Lampe</item>
         <item>Lampe automatique</item>
+        <item>Lampe RGB</item>
         <item>Volet</item>
         <item>Volet automatique</item>
         <item>Chauffage</item>
         <item>Détecteur de flamme</item>
+        <item>Détecteur d\'humidité</item>
+        <item>@string/porte_connectee</item>
     </string-array>
 
     <item name="lightToggle" type="id"/>
@@ -68,6 +72,8 @@
     <item name="alarmToggle" type="id"/>
     <item name="heaterAuto" type="id"/>
     <item name="travellerToggle" type="id"/>
+    <item name="light_and_auto" type="id"/>
+    <item name="door" type="id"/>
 
 
 </resources>

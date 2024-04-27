@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
 import android.widget.TableLayout;
@@ -89,8 +90,12 @@ public class Manage_room extends AppCompatActivity {
                                     //}
                                     break;
                                 case "Alarme":
-                                    ToggleButton buttonAlarm = findViewById(R.id.alarmToggle);
-                                    buttonAlarm.setChecked((boolean) value);
+                                    TextView textAlarm = findViewById(R.id.flammeValue);
+                                    if ((boolean) value) {
+                                        textAlarm.setText("Flamme détectée !!!");
+                                    } else {
+                                        textAlarm.setText("Pas de flamme détectée");
+                                    }
                                     break;
                                 case "Volet":
                                     ToggleButton buttonV = findViewById(R.id.voletValue);
@@ -122,13 +127,9 @@ public class Manage_room extends AppCompatActivity {
                                     //    Toast.makeText(Manage_room.this, getString(R.string.mode_auto_off), Toast.LENGTH_SHORT).show();
                                     //}
                                     break;
-                                case "Flamme":
-                                    TextView textDF = findViewById(R.id.flammeValue);
-                                    if ((boolean) value) {
-                                        textDF.setText(getString(R.string.flamme_on));
-                                    } else {
-                                        textDF.setText(getString(R.string.flamme_off));
-                                    }
+                                case "Porte connectée":
+                                    ToggleButton door = findViewById(R.id.door);
+                                    door.setChecked((boolean) value);
                                     break;
                             }
                         }
@@ -149,12 +150,12 @@ public class Manage_room extends AppCompatActivity {
         List<String> keySet = new ArrayList<>(map.keySet());
         Collections.sort(keySet, Collections.reverseOrder());
         for (String keys : keySet) {
-            TextView text = new TextView(context);
-            text.setText(keys);
-            text.setLayoutParams(parameter);
-            TableRow row = new TableRow(context);
-            row.addView(text, parameter);
-            table.addView(row, parameter);
+            //TextView text = new TextView(context);
+            //text.setText(keys);
+            //text.setLayoutParams(parameter);
+            //TableRow row = new TableRow(context);
+            //row.addView(text, parameter);
+            //table.addView(row, parameter);
             Log.d("Affiche Keys", keys);
             FirebaseDatabase database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/");
             switch (keys) {
@@ -198,7 +199,6 @@ public class Manage_room extends AppCompatActivity {
                             });
                         }
                     });
-                    table.addView(buttonLA);
                     // création du bouton pour changer le mode
                     ToggleButton buttonLAMode = new ToggleButton(context);
                     buttonLAMode.setId(R.id.lightAutoModeToggle);
@@ -226,7 +226,6 @@ public class Manage_room extends AppCompatActivity {
                             });
                         }
                     });
-                    table.addView(buttonLAMode);
 
                     //
                     // changer alarme en mode voyageur
@@ -257,7 +256,24 @@ public class Manage_room extends AppCompatActivity {
                             });
                         }
                     });
-                    table.addView(traveller);
+
+                    TableRow light_and_auto = new TableRow(context);
+                    //light_and_auto.setId(R.id.light_and_auto);
+                    TableRow.LayoutParams params = new TableRow.LayoutParams(
+                            TableRow.LayoutParams.WRAP_CONTENT,
+                            TableRow.LayoutParams.WRAP_CONTENT
+                    );
+                    params.setMarginEnd(10);
+                    params.setMarginStart(10);
+                    buttonLA.setLayoutParams(params);
+                    buttonLAMode.setLayoutParams(params);
+                    light_and_auto.addView(buttonLA);
+                    light_and_auto.addView(buttonLAMode);
+                    TableRow travel = new TableRow(context);
+                    traveller.setLayoutParams(params);
+                    travel.addView(traveller);
+                    table.addView(light_and_auto);
+                    table.addView(travel);
                     break;
                 case "Lampe":
                     if (findViewById(R.id.lightToggle) == null) {
@@ -289,6 +305,9 @@ public class Manage_room extends AppCompatActivity {
                         });
                         table.addView(buttonL);
                     }
+                    break;
+                case "Lampe RGB":
+                    // TODO: 28/04/2024 faire le menu popup ou autre pour le RGB
                     break;
                 case "Volet automatique":
                     ToggleButton buttonVA = new ToggleButton(context);
@@ -540,57 +559,6 @@ public class Manage_room extends AppCompatActivity {
                     });
                     table.addView(heaterAuto);
                     break;
-                case "Flamme":
-                    TextView textDF = new TextView(context);
-                    textDF.setId(R.id.flammeValue);
-                DatabaseReference flamme = database.getReference("Maison/" + name + "/Détection/Flamme");
-                    flamme.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-                            if (!task.isSuccessful()) {
-                                Log.e("Texte flamme", "error retrieving data flamme", task.getException());
-                            }
-                            Object data = task.getResult().getValue();
-                            if (data instanceof Boolean) {
-                                if ((boolean) data) {
-                                    textDF.setText(getString(R.string.flamme_on));
-                                } else {
-                                    textDF.setText(getString(R.string.flamme_off));
-                                }
-                            } else {
-                                Log.e("Texte flamme", "unexpected value type : " + data.getClass().getSimpleName());
-                            }
-                        }
-                    });
-                    table.addView(textDF);
-                    ToggleButton alarm = new ToggleButton(context);
-                    alarm.setId(R.id.alarmToggle);
-                    alarm.setChecked((boolean) map.get("Alarme"));
-                    alarm.setTextOn(getString(R.string.alarm_on));
-                    alarm.setTextOff(getString(R.string.alarm_off));
-                    alarm.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            DatabaseReference alarmRef = database.getReference("Maison/" + name + "/Action/Alarme");
-                            alarmRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                    if (!task.isSuccessful()) {
-                                        Log.e("Toggle Button", "error retrieving data Alarm", task.getException());
-                                    }
-                                    Object data = task.getResult().getValue();
-                                    if (data instanceof Boolean) {
-                                        boolean value = (Boolean) data;
-                                        alarmRef.setValue(!value);
-                                    } else {
-                                        Log.e("Toggle Button", "unexpected value type : " + data.getClass().getSimpleName());
-                                    }
-                                }
-                            });
-                        }
-                    });
-                    table.addView(alarm);
-                    break;
                 case "Mouvement":
                     TextView textDM = new TextView(context);
                     textDM.setId(R.id.mouvValue);
@@ -614,6 +582,56 @@ public class Manage_room extends AppCompatActivity {
                         }
                     });
                     table.addView(textDM);
+                    break;
+                case "Flamme":
+                    TextView textDF = new TextView(context);
+                    textDF.setId(R.id.flammeValue);
+                    DatabaseReference flamme = database.getReference("Maison/" + name + "/Détection/Flamme");
+                    flamme.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (!task.isSuccessful()) {
+                                Log.e("Texte flamme", "error retrieving data flamme", task.getException());
+                            }
+                            Object data = task.getResult().getValue();
+                            if (data instanceof Boolean) {
+                                if ((boolean) data) {
+                                    textDF.setText(getString(R.string.flamme_on));
+                                } else {
+                                    textDF.setText(getString(R.string.flamme_off));
+                                }
+                            } else {
+                                Log.e("Texte flamme", "unexpected value type : " + data.getClass().getSimpleName());
+                            }
+                        }
+                    });
+                    table.addView(textDF);
+                    break;
+                case "Porte connectée":
+                    ToggleButton door = new ToggleButton(context);
+                    door.setId(R.id.door);
+                    door.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DatabaseReference doorRef = database.getReference("Maison/" + name + "/Action/Porte connectée");
+                            doorRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    if (!task.isSuccessful()) {
+                                        Log.e("Texte Porte", "error retrieving data Porte", task.getException());
+                                    }
+                                    Object data = task.getResult().getValue();
+                                    if (data instanceof Boolean) {
+                                        boolean value = (boolean) data;
+                                        doorRef.setValue(!value);
+                                    } else {
+                                        Log.e("Texte Mouvement", "unexpected value type : " + data.getClass().getSimpleName());
+                                    }
+                                }
+                            });
+                        }
+                    });
+                    table.addView(door);
                     break;
             }
         }

@@ -77,6 +77,10 @@ public class AddRoom extends AppCompatActivity {
                             myRef.child("Action/Alarme").setValue(false);
                             database.getReference(getString(R.string.seuilFlamme)).setValue(1000);
                             break;
+                        case "Porte connectée":
+                            myRef.child("Action/" + captor).setValue(false);
+                            myRef.child("Détection/Compteur").setValue(0);
+                            break;
                     }
                 }
                 DatabaseReference myRef = database.getReference();
