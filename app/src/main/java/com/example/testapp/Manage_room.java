@@ -1,12 +1,16 @@
 package com.example.testapp;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.NumberPicker;
+import android.widget.PopupMenu;
 import android.widget.SeekBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -16,6 +20,7 @@ import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -60,6 +65,7 @@ public class Manage_room extends AppCompatActivity {
         TableLayout table = (TableLayout) findViewById(R.id.table);
         initialize(captorData, table);
         database.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("ResourceAsColor")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (String type : dataType) {
@@ -80,14 +86,36 @@ public class Manage_room extends AppCompatActivity {
                                     //    Toast.makeText(Manage_room.this, getString(R.string.mode_auto_off), Toast.LENGTH_SHORT).show();
                                     //}
                                     break;
+                                case "Lampe RGB":
+                                    ToggleButton buttonRGB = findViewById(R.id.RGBid);
+                                    if ("Rouge".equals(value)) {
+                                        buttonRGB.setTextColor(ContextCompat.getColor(context, R.color.Rouge));
+                                        buttonRGB.setChecked(true);
+                                    } else if ("Bleu".equals(value)) {
+                                        buttonRGB.setTextColor(ContextCompat.getColor(context, R.color.Bleu));
+                                        buttonRGB.setChecked(true);
+                                    } else if ("Vert".equals(value)) {
+                                        buttonRGB.setTextColor(ContextCompat.getColor(context, R.color.Vert));
+                                        buttonRGB.setChecked(true);
+                                    } else if ("Jaune".equals(value)) {
+                                        buttonRGB.setTextColor(ContextCompat.getColor(context, R.color.Jaune));
+                                        buttonRGB.setChecked(true);
+                                    } else if ("Cyan".equals(value)) {
+                                        buttonRGB.setTextColor(ContextCompat.getColor(context, R.color.Cyan));
+                                        buttonRGB.setChecked(true);
+                                    } else if ("Magenta".equals(value)) {
+                                        buttonRGB.setTextColor(ContextCompat.getColor(context, R.color.Magenta));
+                                        buttonRGB.setChecked(true);
+                                    } else if ("Blanc".equals(value)) {
+                                        buttonRGB.setTextColor(ContextCompat.getColor(context, R.color.Blanc));
+                                        buttonRGB.setChecked(true);
+                                    } else if ("Off".equals(value)) {
+                                        buttonRGB.setChecked(false);
+                                    }
+                                    break;
                                 case "ModeVoyageur":
                                     ToggleButton traveller = findViewById(R.id.travellerToggle);
                                     traveller.setChecked((boolean) value);
-                                    //if ((boolean) value) {
-                                    //    Toast.makeText(Manage_room.this, getString(R.string.mode_auto_on), Toast.LENGTH_SHORT).show();
-                                    //} else {
-                                    //    Toast.makeText(Manage_room.this, getString(R.string.mode_auto_off), Toast.LENGTH_SHORT).show();
-                                    //}
                                     break;
                                 case "Alarme":
                                     TextView textAlarm = findViewById(R.id.flammeValue);
@@ -104,11 +132,6 @@ public class Manage_room extends AppCompatActivity {
                                 case "Volet automatique":
                                     ToggleButton buttonVAMode = findViewById(R.id.voletAutoModeToggle);
                                     buttonVAMode.setChecked((boolean) value);
-                                    //if ((boolean) value) {
-                                    //    Toast.makeText(Manage_room.this, getString(R.string.mode_auto_on), Toast.LENGTH_SHORT).show();
-                                    //} else {
-                                    //    Toast.makeText(Manage_room.this, getString(R.string.mode_auto_off), Toast.LENGTH_SHORT).show();
-                                    //}
                                     break;
                                 case "Température":
                                     TextView textTemp = findViewById(R.id.temperatureValue);
@@ -121,15 +144,14 @@ public class Manage_room extends AppCompatActivity {
                                 case "Chauffage automatique":
                                     ToggleButton heaterAuto = findViewById(R.id.heaterAuto);
                                     heaterAuto.setChecked((boolean) value);
-                                    //if ((boolean) value) {
-                                    //Toast.makeText(Manage_room.this, getString(R.string.mode_auto_on), Toast.LENGTH_SHORT).show();
-                                    //} else {
-                                    //    Toast.makeText(Manage_room.this, getString(R.string.mode_auto_off), Toast.LENGTH_SHORT).show();
-                                    //}
                                     break;
                                 case "Porte connectée":
                                     ToggleButton door = findViewById(R.id.door);
                                     door.setChecked((boolean) value);
+                                    break;
+                                case "Détecteur d'humidité":
+                                    TextView humidite = findViewById(R.id.humiditeText);
+                                    humidite.setText(getString(R.string.humidite) + value.toString());
                                     break;
                             }
                         }
@@ -232,6 +254,7 @@ public class Manage_room extends AppCompatActivity {
                     //
                     ToggleButton traveller = new ToggleButton(context);
                     traveller.setId(R.id.travellerToggle);
+                    Log.e("TESTTEST", String.valueOf(map.get("ModeVoyageur")));
                     traveller.setChecked((boolean) map.get("ModeVoyageur"));
                     traveller.setTextOn(getString(R.string.traveller_on));
                     traveller.setTextOff(getString(R.string.traveller_off));
@@ -307,7 +330,33 @@ public class Manage_room extends AppCompatActivity {
                     }
                     break;
                 case "Lampe RGB":
-                    // TODO: 28/04/2024 faire le menu popup ou autre pour le RGB
+                    ToggleButton RGB = new ToggleButton(context);
+                    RGB.setId(R.id.RGBid);
+                    RGB.setTextOn(getString(R.string.lampe_on));
+                    RGB.setTextOff(getString(R.string.lampe_off));
+                    RGB.setChecked(map.get(keys) == "Off");
+                    RGB.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DatabaseReference databaseRef = database.getReference( "Maison/" + name + "/Action/Lampe RGB");
+                            databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    if (!task.isSuccessful()) {
+                                        Log.e("Toggle Button", "error retrieving data", task.getException());
+                                    }
+                                    Object data = task.getResult().getValue();
+                                    if (data.equals("Off")) {
+                                        showPopupMenu(v, databaseRef);
+                                    } else {
+                                        databaseRef.setValue("Off");
+                                        RGB.setTextColor(ContextCompat.getColor(context, R.color.Black));
+                                    }
+                                }
+                            });
+                        }
+                    });
+                    table.addView(RGB);
                     break;
                 case "Volet automatique":
                     ToggleButton buttonVA = new ToggleButton(context);
@@ -633,6 +682,22 @@ public class Manage_room extends AppCompatActivity {
                     });
                     table.addView(door);
                     break;
+                case "Détecteur d'humidité":
+                    TextView humidite = new TextView(context);
+                    humidite.setId(R.id.humiditeText);
+                    DatabaseReference humiditeRef = database.getReference("Maison/" + name + "/Détection/Détecteur d'humidité");
+                    humiditeRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (!task.isSuccessful()) {
+                                Log.e("Texte humidité", "error retrieving data humidite", task.getException());
+                            }
+                            Object data = task.getResult().getValue();
+                            humidite.setText(getString(R.string.humidite) + data.toString());
+                        }
+                    });
+                    table.addView(humidite);
+                    break;
             }
         }
     }
@@ -650,6 +715,33 @@ public class Manage_room extends AppCompatActivity {
         startActivity(ia);
     }
 
+    private void showPopupMenu(View v, DatabaseReference db) {
+        PopupMenu popupMenu = new PopupMenu(context, v);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.Rouge) {
+                    db.setValue("Rouge");
+                } else if (itemId == R.id.Bleu) {
+                    db.setValue("Bleu");
+                } else if (itemId == R.id.Vert) {
+                    db.setValue("Vert");
+                } else if (itemId == R.id.Jaune) {
+                    db.setValue("Jaune");
+                } else if (itemId == R.id.Cyan) {
+                    db.setValue("Cyan");
+                } else if (itemId == R.id.Magenta) {
+                    db.setValue("Magenta");
+                } else if (itemId == R.id.Blanc) {
+                    db.setValue("Blanc");
+                }
+                return true;
+            }
+        });
+        popupMenu.inflate(R.menu.menu_colors);
+        popupMenu.show();
+    }
     //toolbar
     public void home(View v) {
         Intent ia = new Intent(this, MainActivity.class);

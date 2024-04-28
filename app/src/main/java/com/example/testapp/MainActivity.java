@@ -70,28 +70,30 @@ public class MainActivity extends AppCompatActivity {
                                             @Override
                                             public void onClick(View v) {
                                                 Intent ia = new Intent(MainActivity.this, Manage_room.class);
-                                                try {
+
                                                     // on récup les données de la salle dans un JSONObject
                                                     for (String type : dataType) {
-                                                        JSONObject inRoomData =  data.getJSONObject("Maison").getJSONObject(name).getJSONObject(type);
-                                                        // on itère sur tous les capteurs présent dans la salle
-                                                        Iterator<String> inRoomCaptor = inRoomData.keys();
-                                                        ia.putExtra("name", name);
+                                                        try {
+                                                            JSONObject inRoomData = data.getJSONObject("Maison").getJSONObject(name).getJSONObject(type);
+                                                            // on itère sur tous les capteurs présent dans la salle
+                                                            Iterator<String> inRoomCaptor = inRoomData.keys();
+                                                            ia.putExtra("name", name);
 
-                                                        while (inRoomCaptor.hasNext()) {
-                                                            String name = inRoomCaptor.next();
-                                                            roomCaptor.add(name);
-                                                            roomCaptorData.add(inRoomData.get(name));
+                                                            while (inRoomCaptor.hasNext()) {
+                                                                String name = inRoomCaptor.next();
+                                                                roomCaptor.add(name);
+                                                                roomCaptorData.add(inRoomData.get(name));
+                                                            }
+                                                            Log.d("DATA ROOM CAPTOR", String.valueOf(roomCaptor));
+                                                            ia.putExtra("roomCaptor", roomCaptor);
+                                                            ia.putExtra("roomCaptorData", (Serializable) roomCaptorData);
+                                                            Log.d("Value sent to manage", String.valueOf(roomCaptorData));
+                                                        } catch (JSONException e) {
+                                                            e.printStackTrace();
                                                         }
-                                                        Log.d("DATA ROOM CAPTOR", String.valueOf(roomCaptor));
-                                                        ia.putExtra("roomCaptor", roomCaptor);
-                                                        ia.putExtra("roomCaptorData", (Serializable) roomCaptorData);
-                                                        Log.d("Value sent to manage", String.valueOf(roomCaptorData));
                                                     }
 
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                }
+
                                                 startActivity(ia);
                                             }
                                         });
@@ -117,8 +119,8 @@ public class MainActivity extends AppCompatActivity {
         }
     public static String convert(Object data) {
         // fonction qui permet de convertir les données contenu dans le datasnaphot en y ajoutant des "" pour pouvoir les transformer plus tard en JSON
-        Object temp = data.toString().replaceAll("(\\b[\\w\\s]+)(?==)(?==)", "\"$1\"");
-        return temp.toString().replaceAll("(\\b[\\d\\s:/]+)(?=[}])(?=[}])", "\"$1\"");
+        Object temp = data.toString().replaceAll("(\\b[\\w\\s']+)(?==)(?==)", "\"$1\"");
+        return temp.toString().replaceAll("(\\b[\\d\\s:/']+)(?=[}])(?=[}])", "\"$1\"");
     }
 
     public void addRoom(View v) {

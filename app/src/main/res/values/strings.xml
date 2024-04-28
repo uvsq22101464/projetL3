@@ -44,6 +44,7 @@
     <string name="traveller_on">Mode voyage activé</string>
     <string name="traveller_off">Mode voyage désactivé</string>
     <string name="porte_connectee">Porte connectée</string>
+    <string name="humidite">Niveau d\'humidité dans l\'air :\ </string>
 
     <string-array name="captors">
         <item>Lampe</item>
@@ -74,6 +75,9 @@
     <item name="travellerToggle" type="id"/>
     <item name="light_and_auto" type="id"/>
     <item name="door" type="id"/>
+    <item name="humiditeText" type="id"/>
+    <item name="RGBid" type="id"/>
+    <item name="selectColors" type="id"/>
 
 
 </resources>

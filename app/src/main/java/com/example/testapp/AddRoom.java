@@ -57,6 +57,9 @@ public class AddRoom extends AppCompatActivity {
                             myRef.child("Mode/Lampe automatique").setValue(true);
                             myRef.child("Mode/ModeVoyageur").setValue(false);
                             break;
+                        case "Lampe RGB":
+                            myRef.child("Action/" + captor).setValue("Off");
+                            break;
                         case "Volet":
                             myRef.child("Action/" + captor).setValue(false);
                             break;
@@ -80,6 +83,9 @@ public class AddRoom extends AppCompatActivity {
                         case "Porte connectée":
                             myRef.child("Action/" + captor).setValue(false);
                             myRef.child("Détection/Compteur").setValue(0);
+                            break;
+                        case "Détecteur d'humidité":
+                            myRef.child("Détection/Détecteur d'humidité").setValue(0);
                             break;
                     }
                 }

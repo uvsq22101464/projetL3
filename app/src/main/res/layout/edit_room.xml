@@ -23,7 +23,7 @@
                     android:onClick="accueil"
                     android:text="@string/retour"
                     android:textSize="20sp"
-                    android:backgroundTint="@color/black">
+                    android:backgroundTint="@color/Black">
                     <!--android:src="@drawable/ic_launcher_foreground">
                             -->
 
