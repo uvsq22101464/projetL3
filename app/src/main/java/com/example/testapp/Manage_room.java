@@ -30,6 +30,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -112,6 +114,10 @@ public class Manage_room extends AppCompatActivity {
                                     } else if ("Off".equals(value)) {
                                         buttonRGB.setChecked(false);
                                     }
+                                    break;
+                                case "Alarme mouvement":
+                                    ToggleButton alarm = findViewById(R.id.alarmToggle);
+                                    alarm.setChecked((boolean) value);
                                     break;
                                 case "ModeVoyageur":
                                     ToggleButton traveller = findViewById(R.id.travellerToggle);
@@ -279,6 +285,32 @@ public class Manage_room extends AppCompatActivity {
                             });
                         }
                     });
+                    ToggleButton alarmMouv = new ToggleButton(context);
+                    alarmMouv.setId(R.id.alarmToggle);
+                    alarmMouv.setChecked((boolean) map.get("Alarme mouvement"));
+                    alarmMouv.setTextOn(getString(R.string.alarm_on));
+                    alarmMouv.setTextOff(getString(R.string.alarm_off));
+                    alarmMouv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DatabaseReference databaseRef = database.getReference("Maison/" + name + "/Action/Alarme mouvement");
+                            databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    if (!task.isSuccessful()) {
+                                        Log.e("Toggle Button", "error retrieving data", task.getException());
+                                    }
+                                    Object data = task.getResult().getValue();
+                                    if (data instanceof Boolean) {
+                                        boolean value = (Boolean) data;
+                                        databaseRef.setValue(!value);
+                                    } else {
+                                        Log.e("Toggle Button", "unexpected value type : " + data.getClass().getSimpleName());
+                                    }
+                                }
+                            });
+                        }
+                    });
 
                     TableRow light_and_auto = new TableRow(context);
                     //light_and_auto.setId(R.id.light_and_auto);
@@ -295,6 +327,7 @@ public class Manage_room extends AppCompatActivity {
                     TableRow travel = new TableRow(context);
                     traveller.setLayoutParams(params);
                     travel.addView(traveller);
+                    travel.addView(alarmMouv);
                     table.addView(light_and_auto);
                     table.addView(travel);
                     break;
@@ -448,10 +481,11 @@ public class Manage_room extends AppCompatActivity {
                         }
                     });
                     // ajout un textview pour voir la visualisation des données de la barre
+                    TextView displayValue = new TextView(context);
                     luminosity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                         @Override
                         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {}
-
+                            // rajouter le display des valeurs
                         @Override
                         public void onStartTrackingTouch(SeekBar seekBar) {}
 
@@ -717,6 +751,7 @@ public class Manage_room extends AppCompatActivity {
 
     private void showPopupMenu(View v, DatabaseReference db) {
         PopupMenu popupMenu = new PopupMenu(context, v);
+
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

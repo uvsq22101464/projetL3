@@ -56,6 +56,7 @@ public class AddRoom extends AppCompatActivity {
                             myRef.child("Détection/Mouvement").setValue(false);
                             myRef.child("Mode/Lampe automatique").setValue(true);
                             myRef.child("Mode/ModeVoyageur").setValue(false);
+                            myRef.child("Action/Alarme mouvement").setValue(false);
                             break;
                         case "Lampe RGB":
                             myRef.child("Action/" + captor).setValue("Off");

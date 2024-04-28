@@ -70,8 +70,8 @@ public class DisplayTemperature extends AppCompatActivity {
                 });
                 xAxis.setLabelRotationAngle(15f);
                 xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-                xAxis.setAxisMaximum(chart.getXChartMax()+500);
-                xAxis.setAxisMinimum(chart.getXChartMin()-500);
+                xAxis.setAxisMaximum(chart.getXChartMax()+300);
+                xAxis.setAxisMinimum(chart.getXChartMin()-300);
                 YAxis yAxis = chart.getAxisLeft();
                 yAxis.setAxisMaximum(chart.getYMax()+1);
                 yAxis.setAxisMinimum(chart.getYMin()-1);
