@@ -15,31 +15,19 @@
             android:layout_height="wrap_content"
             android:textSize="25sp"
             android:layout_gravity="center"
-            android:layout_marginBottom="20dp"
-            android:text="@string/temperature">
+            android:text="@string/temperature"
+            android:paddingBottom="20dp">
 
         </TextView>
 
-        <LinearLayout
+        <com.github.mikephil.charting.charts.LineChart
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/table_temperature">
+            android:layout_height="500dp"
+            android:id="@+id/lineChart"
+            android:layout_margin="10dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:id="@+id/text_temperature">
+        </com.github.mikephil.charting.charts.LineChart>
 
-            </TextView>
-
-
-
-
-
-
-        </LinearLayout>
 
     </LinearLayout>
 

@@ -238,7 +238,7 @@ public class Manage_room extends AppCompatActivity {
                     traveller.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DatabaseReference databaseRef = database.getReference("Maison/" + name + "/ModeVoyageur");
+                            DatabaseReference databaseRef = database.getReference("Maison/" + name + "/Mode/ModeVoyageur");
                             databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
