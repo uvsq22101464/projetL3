@@ -1,14 +1,17 @@
 package com.example.testapp;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.PopupMenu;
 import android.widget.SeekBar;
@@ -30,7 +33,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,12 +46,17 @@ public class Manage_room extends AppCompatActivity {
     ArrayList<String> roomCaptor;
     ArrayList<?> roomCaptorData;
     DatabaseReference database;
+    private static final String CHANNEL_ID = "my_channel";
+    private static final int NOTIFICATION_ID = 1;
+    NotificationManager notificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manage_room);
         Log.d("Layout selected", "manage_room");
+
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         name = getIntent().getStringExtra("name");
         String[] dataType = {"Action/", "Détection/", "Mode/"};
@@ -82,11 +89,6 @@ public class Manage_room extends AppCompatActivity {
                                 case "Lampe automatique":
                                     ToggleButton buttonLAMode = findViewById(R.id.lightAutoModeToggle);
                                     buttonLAMode.setChecked((boolean) value);
-                                    //if ((boolean) value) {
-                                    //    Toast.makeText(Manage_room.this, getString(R.string.mode_auto_on), Toast.LENGTH_SHORT).show();
-                                    //} else {
-                                    //    Toast.makeText(Manage_room.this, getString(R.string.mode_auto_off), Toast.LENGTH_SHORT).show();
-                                    //}
                                     break;
                                 case "Lampe RGB":
                                     ToggleButton buttonRGB = findViewById(R.id.RGBid);
@@ -116,8 +118,26 @@ public class Manage_room extends AppCompatActivity {
                                     }
                                     break;
                                 case "Alarme mouvement":
-                                    ToggleButton alarm = findViewById(R.id.alarmToggle);
-                                    alarm.setChecked((boolean) value);
+                                    if ((boolean) value) {
+                                        Notification.Builder builder = null;
+                                        Intent ia = new Intent(context, MainActivity.class);
+                                        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, ia, PendingIntent.FLAG_IMMUTABLE);
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                            builder = new Notification.Builder(context, CHANNEL_ID)
+                                                    .setSmallIcon(R.drawable.notification_icon)
+                                                    .setContentTitle("Intrusion détectée !")
+                                                    .setContentText("Le capteur de mouvement s'est activé alors que le Mode voyageur est actif")
+                                                    .setPriority(Notification.PRIORITY_DEFAULT)
+                                                    .setContentIntent(pendingIntent)
+                                                    .setAutoCancel(true);
+                                            Notification notification;
+                                            notification = builder.build();
+                                            notificationManager.notify(NOTIFICATION_ID, notification);
+                                            createNotificationChannel();
+                                        }
+
+                                    }
+
                                     break;
                                 case "ModeVoyageur":
                                     ToggleButton traveller = findViewById(R.id.travellerToggle);
@@ -260,7 +280,6 @@ public class Manage_room extends AppCompatActivity {
                     //
                     ToggleButton traveller = new ToggleButton(context);
                     traveller.setId(R.id.travellerToggle);
-                    Log.e("TESTTEST", String.valueOf(map.get("ModeVoyageur")));
                     traveller.setChecked((boolean) map.get("ModeVoyageur"));
                     traveller.setTextOn(getString(R.string.traveller_on));
                     traveller.setTextOff(getString(R.string.traveller_off));
@@ -285,33 +304,6 @@ public class Manage_room extends AppCompatActivity {
                             });
                         }
                     });
-                    ToggleButton alarmMouv = new ToggleButton(context);
-                    alarmMouv.setId(R.id.alarmToggle);
-                    alarmMouv.setChecked((boolean) map.get("Alarme mouvement"));
-                    alarmMouv.setTextOn(getString(R.string.alarm_on));
-                    alarmMouv.setTextOff(getString(R.string.alarm_off));
-                    alarmMouv.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            DatabaseReference databaseRef = database.getReference("Maison/" + name + "/Action/Alarme mouvement");
-                            databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                    if (!task.isSuccessful()) {
-                                        Log.e("Toggle Button", "error retrieving data", task.getException());
-                                    }
-                                    Object data = task.getResult().getValue();
-                                    if (data instanceof Boolean) {
-                                        boolean value = (Boolean) data;
-                                        databaseRef.setValue(!value);
-                                    } else {
-                                        Log.e("Toggle Button", "unexpected value type : " + data.getClass().getSimpleName());
-                                    }
-                                }
-                            });
-                        }
-                    });
-
                     TableRow light_and_auto = new TableRow(context);
                     //light_and_auto.setId(R.id.light_and_auto);
                     TableRow.LayoutParams params = new TableRow.LayoutParams(
@@ -327,7 +319,6 @@ public class Manage_room extends AppCompatActivity {
                     TableRow travel = new TableRow(context);
                     traveller.setLayoutParams(params);
                     travel.addView(traveller);
-                    travel.addView(alarmMouv);
                     table.addView(light_and_auto);
                     table.addView(travel);
                     break;
@@ -751,7 +742,6 @@ public class Manage_room extends AppCompatActivity {
 
     private void showPopupMenu(View v, DatabaseReference db) {
         PopupMenu popupMenu = new PopupMenu(context, v);
-
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -777,19 +767,28 @@ public class Manage_room extends AppCompatActivity {
         popupMenu.inflate(R.menu.menu_colors);
         popupMenu.show();
     }
+
+    public void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            CharSequence channelName = "My channel";
+            String channelDescription = "My channel description";
+
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, channelName, importance);
+            channel.setDescription(channelDescription);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+
     //toolbar
     public void home(View v) {
         Intent ia = new Intent(this, MainActivity.class);
         startActivity(ia);
     }
 
-    public void scene(View v) {
-        Intent ia = new Intent(this, Scene.class);
-        startActivity(ia);
-    }
-
-    public void planning(View v) {
-        Intent ia = new Intent(this, Planning.class);
+    public void modeManager(View v) {
+        Intent ia = new Intent(this, ModeManager.class);
         startActivity(ia);
     }
 

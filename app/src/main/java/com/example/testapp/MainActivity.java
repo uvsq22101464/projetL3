@@ -134,13 +134,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(ia);
     }
 
-    public void scene(View v) {
-        Intent ia = new Intent(this, Scene.class);
-        startActivity(ia);
-    }
-
-    public void planning(View v) {
-        Intent ia = new Intent(this, Planning.class);
+    public void modeManager(View v) {
+        Intent ia = new Intent(this, ModeManager.class);
         startActivity(ia);
     }
 

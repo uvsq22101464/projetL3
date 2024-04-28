@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
 
     <application
         android:allowBackup="true"
@@ -23,26 +26,7 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".Menu"
-            android:exported="true"
-            android:screenOrientation="portrait">
-
-        </activity>
-
         <activity android:name=".AddRoom"
-            android:exported="true"
-            android:screenOrientation="portrait">
-
-        </activity>
-
-        <activity android:name=".Scene"
-            android:exported="true"
-            android:screenOrientation="portrait">
-
-        </activity>
-
-        <activity android:name=".Planning"
             android:exported="true"
             android:screenOrientation="portrait">
 
@@ -60,7 +44,7 @@
 
         </activity>
 
-        <activity android:name=".configPlanning"
+        <activity android:name=".ModeManager"
             android:exported="true"
             android:screenOrientation="portrait">
 

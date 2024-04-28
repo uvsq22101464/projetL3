@@ -1,11 +1,9 @@
 package com.example.testapp;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +15,6 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.google.firebase.Firebase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,7 +24,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 
 public class DisplayTemperature extends AppCompatActivity {
 
@@ -93,13 +89,8 @@ public class DisplayTemperature extends AppCompatActivity {
         startActivity(ia);
     }
 
-    public void scene(View v) {
-        Intent ia = new Intent(this, Scene.class);
-        startActivity(ia);
-    }
-
-    public void planning(View v) {
-        Intent ia = new Intent(this, Planning.class);
+    public void modeManager(View v) {
+        Intent ia = new Intent(this, ModeManager.class);
         startActivity(ia);
     }
 

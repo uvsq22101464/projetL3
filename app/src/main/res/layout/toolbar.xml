@@ -7,7 +7,8 @@
     android:layout_gravity="bottom"
     android:shrinkColumns="*">
 
-    <TableRow>
+    <TableRow
+        android:gravity="center">
         <TextView
             android:textSize="17sp"
             android:gravity="center"
@@ -25,42 +26,33 @@
         <TextView
             android:textSize="17sp"
             android:gravity="center"
-            android:text="@string/toolbar3">
-
-        </TextView>
-
-        <TextView
-            android:textSize="17sp"
-            android:gravity="center"
             android:text="@string/toolbar4">
 
         </TextView>
 
     </TableRow>
 
-    <TableRow>
+    <TableRow
+        android:gravity="center">
 
         <ImageButton
             android:onClick="home"
-            android:src="@drawable/ic_launcher_foreground">
+            android:src="@drawable/ic_home"
+            android:padding="20dp">
 
         </ImageButton>
 
         <ImageButton
-            android:onClick="scene"
-            android:src="@drawable/ic_launcher_foreground">
-
-        </ImageButton>
-
-        <ImageButton
-            android:onClick="planning"
-            android:src="@drawable/ic_launcher_foreground">
+            android:onClick="modeManager"
+            android:src="@drawable/ic_mode"
+            android:padding="20dp">
 
         </ImageButton>
 
         <ImageButton
             android:onClick="display_data"
-            android:src="@drawable/ic_launcher_foreground">
+            android:src="@drawable/ic_graph"
+            android:padding="20dp">
 
         </ImageButton>
 
