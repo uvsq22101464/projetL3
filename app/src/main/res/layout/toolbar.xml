@@ -2,6 +2,7 @@
 
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -24,7 +25,7 @@
             android:onClick="home"
             android:scaleType="fitCenter"
             android:src="@drawable/maison"
-            tools:tint="@color/Blanc">
+            app:tint="@color/Blanc">
 
         </ImageButton>
 
@@ -35,7 +36,7 @@
             android:onClick="modeManager"
             android:scaleType="fitCenter"
             android:src="@drawable/etincelle"
-            tools:tint="@color/Blanc">
+            app:tint="@color/Blanc">
 
         </ImageButton>
 
@@ -46,7 +47,7 @@
             android:onClick="display_data"
             android:scaleType="fitCenter"
             android:src="@drawable/temperature"
-            tools:tint="@color/Blanc">
+            app:tint="@color/Blanc">
 
         </ImageButton>
 
