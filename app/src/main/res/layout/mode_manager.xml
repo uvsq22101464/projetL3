@@ -7,15 +7,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/ic_launcher_background"
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="wrap_content"
+
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="25sp"
-            android:layout_gravity="center"
+            android:background="@color/Blanc_transparent"
+            android:gravity="center"
             android:text="@string/modes"
-            android:paddingBottom="20dp">
+            android:textSize="22sp">
 
         </TextView>
 
