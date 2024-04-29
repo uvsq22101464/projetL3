@@ -3,11 +3,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/Black"
     android:paddingTop="15dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/Black"
         android:orientation="vertical">
 
         <TextView
@@ -17,6 +19,7 @@
             android:gravity="center"
             android:paddingBottom="10dp"
             android:text="@string/add_room_title"
+            android:textColor="@color/Blanc"
             android:textSize="25sp">
 
         </TextView>
@@ -26,7 +29,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10sp"
-            android:hint="@string/add_room_edit">
+            android:backgroundTint="@color/Blanc"
+            android:hint="@string/add_room_edit"
+            android:textColor="@color/Blanc"
+            android:textColorHint="#484848">
 
         </EditText>
 
