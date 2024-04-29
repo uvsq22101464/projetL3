@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="Black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="Blanc_transparent">#A6FFFFFF</color>
     <color name="App">#FDA14D</color>
     <color name="Rouge">#FF0000</color>
     <color name="Bleu">#0000FF</color>
