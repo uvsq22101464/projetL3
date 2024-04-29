@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TableLayout;
+import com.example.testapp.CustomSpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -107,14 +108,11 @@ public class AddRoom extends AppCompatActivity {
         if (spinners.size() < getResources().getStringArray(R.array.captors).length)  {
             TableLayout table = findViewById(R.id.add_room_table);
             Spinner spinner = new Spinner(this);
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                    this,
-                    R.array.captors,
-                    android.R.layout.simple_spinner_item
-            );
-            // Specify the layout to use when the list of choices appears.
+            // Créer un adaptateur personnalisé avec la couleur du texte en blanc
+            CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.captors));
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            // Apply the adapter to the spinner.
+
+            // Appliquer l'adaptateur personnalisé au Spinner
             spinner.setAdapter(adapter);
             spinners.add(spinner);
             TableLayout.LayoutParams parameter = new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT);
