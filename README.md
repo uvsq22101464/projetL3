@@ -105,3 +105,49 @@ Code associé :
         });
         }
 ```
+Dans ce code on va se connectée à la base de données firebase et la fonction "addOnCompleteListener" va permettre de récupérer les données, pour ce faire les données de firebase vont être converties en un arbre JSON, ensuite on va crée des boutons avec les noms des salles et lors du clique sur l'un d'eux on va récupérer les capteurs, leur valeurs et lancer une nouvelle activitée.
+
+La page ainsi lancée comprend une deuxième façon de récupérer les données et elle le fait dès qu'il y a un changement dans la base de données
+code associé :
+```java
+roomCaptor = getIntent().getStringArrayListExtra("roomCaptor");
+database = FirebaseDatabase.getInstance("https://projet-l3-maison-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Maison/" + name);
+database.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (String type : dataType) {
+                    for (String captor : roomCaptor) {
+                        Object value = snapshot.child(type + captor).getValue();
+                        if (value != null) {
+                            switch (captor) {
+                                case "Lampe":
+                                    ToggleButton buttonL = findViewById(R.id.lightToggle);
+                                    buttonL.setChecked((boolean) value);
+                                    break;
+                                 // gère les différents cas
+```
+Ici la fonction est appelé lors d'un changement dans la Realtime Database et en fonction de la valeur changer va regarder le capteur concerner et afficher à l'utilisateur la modification.
+Les boutons eux, quand ils sont cliqués vont regarder leur valeur dans la base de données avant de la changée, un exemple :
+```java
+public void onClick(View v) {
+    DatabaseReference databaseRef = database.getReference( "Maison/" + name);
+    databaseRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        // On change la valeur de la lampe
+         @Override
+         public void onComplete(@NonNull Task<DataSnapshot> task) {
+             if (!task.isSuccessful()) {
+                 Log.e("Toggle Button", "error retrieving data", task.getException());
+             }
+             Object data = task.getResult().child("Action/Lampe").getValue();
+             if (data instanceof Boolean) {
+                 boolean value = (Boolean) data;
+                 databaseRef.child("Action/Lampe").setValue(!value);
+             } else {
+                 Log.e("Toggle Button", "unexpected value type : " + data.getClass().getSimpleName());
+             }
+         }
+    });
+}
+```
+Dans ce code la lampe change de valeur et l'assigne dans la base de donnée avec "databaseRef.child("Action/Lampe").setValue(!value);"
