@@ -22,10 +22,11 @@
         </TextView>
 
         <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/lineChart"
             android:layout_width="match_parent"
             android:layout_height="500dp"
-            android:id="@+id/lineChart"
-            android:layout_margin="10dp">
+            android:layout_margin="10dp"
+            android:background="#77FFFFFF">
 
         </com.github.mikephil.charting.charts.LineChart>
 
