@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/ic_launcher_background"
+        android:background="@color/Blanc"
         android:id="@+id/tableLayout"
         android:orientation="vertical">
 
