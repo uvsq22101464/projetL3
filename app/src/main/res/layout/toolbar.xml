@@ -19,12 +19,12 @@
 
         <ImageButton
             android:layout_width="93dp"
-            android:layout_height="45dp"
+            android:layout_height="match_parent"
             android:backgroundTint="@color/transparent"
             android:onClick="home"
             android:scaleType="fitCenter"
             android:src="@drawable/maison"
-            tools:tint="@color/Black">
+            tools:tint="@color/Blanc">
 
         </ImageButton>
 
@@ -35,7 +35,7 @@
             android:onClick="modeManager"
             android:scaleType="fitCenter"
             android:src="@drawable/etincelle"
-            tools:tint="@color/Black">
+            tools:tint="@color/Blanc">
 
         </ImageButton>
 
@@ -46,7 +46,7 @@
             android:onClick="display_data"
             android:scaleType="fitCenter"
             android:src="@drawable/temperature"
-            tools:tint="@color/Black">
+            tools:tint="@color/Blanc">
 
         </ImageButton>
 
@@ -57,7 +57,7 @@
         <TextView
             android:gravity="center"
             android:text="@string/toolbar1"
-            android:textColor="@color/Black"
+            android:textColor="@color/Blanc"
             android:textSize="11sp">
 
         </TextView>
@@ -65,7 +65,7 @@
         <TextView
             android:gravity="center"
             android:text="@string/toolbar2"
-            android:textColor="@color/Black"
+            android:textColor="@color/Blanc"
             android:textSize="11sp">
 
         </TextView>
@@ -73,7 +73,7 @@
         <TextView
             android:gravity="center"
             android:text="@string/toolbar4"
-            android:textColor="@color/Black"
+            android:textColor="@color/Blanc"
             android:textSize="11sp">
 
         </TextView>
