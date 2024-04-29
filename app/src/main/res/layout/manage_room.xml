@@ -7,25 +7,27 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/Black"
         android:orientation="vertical">
 
 
         <TextView
+            android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:id="@+id/name">
+            android:gravity="center">
 
         </TextView>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/modify"
-            android:textSize="20sp"
             android:layout_gravity="end"
             android:layout_margin="15dp"
-            android:onClick="modify">
+            android:backgroundTint="@color/App"
+            android:onClick="modify"
+            android:text="@string/modify"
+            android:textSize="20sp">
 
         </Button>
 
@@ -45,11 +47,12 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/delete"
-            android:textSize="20sp"
             android:layout_gravity="end"
             android:layout_margin="15dp"
-            android:onClick="delete">
+            android:backgroundTint="@color/App"
+            android:onClick="delete"
+            android:text="@string/delete"
+            android:textSize="20sp">
 
         </Button>
 
