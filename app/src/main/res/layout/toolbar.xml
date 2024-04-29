@@ -2,62 +2,83 @@
 
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
     android:shrinkColumns="*">
 
     <TableRow
-        android:gravity="center">
-        <TextView
-            android:textSize="17sp"
-            android:gravity="center"
-            android:text="@string/toolbar1">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="65dp"
+        android:layout_marginRight="65dp">
 
-        </TextView>
+        <ImageButton
+            android:layout_width="92dp"
+            android:layout_height="55dp"
+            android:backgroundTint="@color/transparent"
+            android:onClick="home"
+            android:scaleType="fitCenter"
+            android:src="@drawable/maison"
+            tools:tint="@color/Black">
 
-        <TextView
-            android:textSize="17sp"
-            android:gravity="center"
-            android:text="@string/toolbar2">
+        </ImageButton>
 
-        </TextView>
+        <ImageButton
+            android:layout_width="92dp"
+            android:layout_height="55dp"
+            android:backgroundTint="@color/transparent"
+            android:onClick="modeManager"
+            android:scaleType="fitCenter"
+            android:src="@drawable/etincelle"
+            tools:tint="@color/Black">
 
-        <TextView
-            android:textSize="17sp"
-            android:gravity="center"
-            android:text="@string/toolbar4">
+        </ImageButton>
 
-        </TextView>
+        <ImageButton
+            android:layout_width="92dp"
+            android:layout_height="55dp"
+            android:backgroundTint="@color/transparent"
+            android:onClick="display_data"
+            android:scaleType="fitCenter"
+            android:src="@drawable/temperature"
+            tools:tint="@color/Black">
+
+        </ImageButton>
 
     </TableRow>
 
     <TableRow
-        android:gravity="center">
+        android:layout_marginLeft="65dp"
+        android:layout_marginRight="65dp"
+        android:layout_marginBottom="15dp"
+        tools:visibility="visible">
 
-        <ImageButton
-            android:onClick="home"
-            android:src="@drawable/ic_home"
-            android:padding="20dp">
+        <TextView
+            android:gravity="center"
+            android:text="@string/toolbar1"
+            android:textColor="@color/Black"
+            android:textSize="13sp">
 
-        </ImageButton>
+        </TextView>
 
-        <ImageButton
-            android:onClick="modeManager"
-            android:src="@drawable/ic_mode"
-            android:padding="20dp">
+        <TextView
+            android:gravity="center"
+            android:text="@string/toolbar2"
+            android:textColor="@color/Black"
+            android:textSize="13sp">
 
-        </ImageButton>
+        </TextView>
 
-        <ImageButton
-            android:onClick="display_data"
-            android:src="@drawable/ic_graph"
-            android:padding="20dp">
+        <TextView
+            android:gravity="center"
+            android:text="@string/toolbar4"
+            android:textColor="@color/Black"
+            android:textSize="13sp">
 
-        </ImageButton>
+        </TextView>
 
     </TableRow>
 
 </TableLayout>
-
-
