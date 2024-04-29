@@ -133,4 +133,20 @@ public class AddRoom extends AppCompatActivity {
             spinners.remove(spinners.size() - 1);
         }
     }
+
+    //toolbar
+    public void home(View v) {
+        Intent ia = new Intent(this, MainActivity.class);
+        startActivity(ia);
+    }
+
+    public void modeManager(View v) {
+        Intent ia = new Intent(this, ModeManager.class);
+        startActivity(ia);
+    }
+
+    public void display_data(View v) {
+        Intent ia = new Intent(this, DisplayTemperature.class);
+        startActivity(ia);
+    }
 }

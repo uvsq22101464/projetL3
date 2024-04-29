@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.NumberPicker;
 import android.widget.PopupMenu;
 import android.widget.SeekBar;
@@ -147,6 +148,22 @@ public class Manage_room extends AppCompatActivity {
                                     TextView textAlarm = findViewById(R.id.flammeValue);
                                     if ((boolean) value) {
                                         textAlarm.setText("Flamme détectée !!!");
+                                        Notification.Builder builder = null;
+                                        Intent ia = new Intent(context, MainActivity.class);
+                                        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, ia, PendingIntent.FLAG_IMMUTABLE);
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                            builder = new Notification.Builder(context, CHANNEL_ID)
+                                                    .setSmallIcon(R.drawable.notification_icon)
+                                                    .setContentTitle("Flamme détectée !")
+                                                    .setContentText("Le capteur de flamme s'est activé, un départ d'incendie est détecté")
+                                                    .setPriority(Notification.PRIORITY_DEFAULT)
+                                                    .setContentIntent(pendingIntent)
+                                                    .setAutoCancel(true);
+                                            Notification notification;
+                                            notification = builder.build();
+                                            notificationManager.notify(NOTIFICATION_ID, notification);
+                                            createNotificationChannel();
+                                        }
                                     } else {
                                         textAlarm.setText("Pas de flamme détectée");
                                     }
@@ -251,8 +268,8 @@ public class Manage_room extends AppCompatActivity {
                     ToggleButton buttonLAMode = new ToggleButton(context);
                     buttonLAMode.setId(R.id.lightAutoModeToggle);
                     buttonLAMode.setChecked((Boolean) map.get("Lampe automatique"));
-                    buttonLAMode.setTextOff(getString(R.string.mode_off));
-                    buttonLAMode.setTextOn(getString(R.string.mode_on));
+                    buttonLAMode.setTextOff(getString(R.string.LA_mode_off));
+                    buttonLAMode.setTextOn(getString(R.string.LA_mode_on));
                     buttonLAMode.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -426,8 +443,8 @@ public class Manage_room extends AppCompatActivity {
                     ToggleButton buttonVAMode = new ToggleButton(context);
                     buttonVAMode.setId(R.id.voletAutoModeToggle);
                     buttonVAMode.setChecked((Boolean) map.get("Volet automatique"));
-                    buttonVAMode.setTextOff(getString(R.string.mode_off));
-                    buttonVAMode.setTextOn(getString(R.string.mode_on));
+                    buttonVAMode.setTextOff(getString(R.string.VA_mode_off));
+                    buttonVAMode.setTextOn(getString(R.string.VA_mode_on));
                     buttonVAMode.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -455,6 +472,8 @@ public class Manage_room extends AppCompatActivity {
                     luminosity.setId(R.id.luminosity);
                     luminosity.setMax(1000);
                     DatabaseReference light = database.getReference().child("Seuil Luminosité");
+                    TextView displayValue = new TextView(context);
+                    displayValue.setTextSize(15);
                     light.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -466,17 +485,18 @@ public class Manage_room extends AppCompatActivity {
                                 Long long_data = (Long) data;
                                 int int_data = long_data.intValue();
                                 luminosity.setProgress(int_data);
+                                displayValue.setText("Seuil de luminosité : " + data.toString());
                             } else {
                                 Log.e("Data type", "Unexpected data type " + data.getClass().getSimpleName() + "expected Long");
                             }
                         }
                     });
-                    // ajout un textview pour voir la visualisation des données de la barre
-                    TextView displayValue = new TextView(context);
                     luminosity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                         @Override
-                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {}
-                            // rajouter le display des valeurs
+                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                            displayValue.setText("Seuil de luminosité : " + progress);
+                        }
+
                         @Override
                         public void onStartTrackingTouch(SeekBar seekBar) {}
 
@@ -485,7 +505,7 @@ public class Manage_room extends AppCompatActivity {
                             light.setValue(seekBar.getProgress());
                         }
                     });
-
+                    table.addView(displayValue);
                     table.addView(luminosity);
 
                     break;
@@ -608,8 +628,8 @@ public class Manage_room extends AppCompatActivity {
                     ToggleButton heaterAuto = new ToggleButton(context);
                     heaterAuto.setId(R.id.heaterAuto);
                     heaterAuto.setChecked((boolean) map.get("Chauffage automatique"));
-                    heaterAuto.setTextOn(getString(R.string.mode_on));
-                    heaterAuto.setTextOff(getString(R.string.mode_off));
+                    heaterAuto.setTextOn(getString(R.string.heater_mode_on));
+                    heaterAuto.setTextOff(getString(R.string.heater_mode_off));
                     heaterAuto.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -684,6 +704,8 @@ public class Manage_room extends AppCompatActivity {
                 case "Porte connectée":
                     ToggleButton door = new ToggleButton(context);
                     door.setId(R.id.door);
+                    door.setTextOn(getString(R.string.door_mode_on));
+                    door.setTextOff(getString(R.string.door_mode_off));
                     door.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

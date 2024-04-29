@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -52,10 +53,12 @@ public class DisplayTemperature extends AppCompatActivity {
                 LineDataSet dataSet = new LineDataSet(values, "Températures");
                 dataSet.setLineWidth(2f);
                 dataSet.setValueTextSize(10f);
+                dataSet.setValueTextColor(getColor(R.color.Blanc));
                 LineData line = new LineData(dataSet);
                 chart.setData(line);
                 chart.invalidate();
                 XAxis xAxis = chart.getXAxis();
+                xAxis.setTextColor(getColor(R.color.Blanc));
                 xAxis.setValueFormatter(new ValueFormatter() {
                     @Override
                     public String getFormattedValue(float value) {
@@ -71,6 +74,9 @@ public class DisplayTemperature extends AppCompatActivity {
                 YAxis yAxis = chart.getAxisLeft();
                 yAxis.setAxisMaximum(chart.getYMax()+1);
                 yAxis.setAxisMinimum(chart.getYMin()-1);
+                yAxis.setTextColor(getColor(R.color.Blanc));
+                Legend legend = chart.getLegend();
+                legend.setTextColor(getColor(R.color.Blanc));
                 chart.animateX(1500);
                 chart.notifyDataSetChanged();
 
