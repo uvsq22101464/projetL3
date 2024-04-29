@@ -17,6 +17,7 @@
             android:background="@color/Blanc_transparent"
             android:gravity="center"
             android:text="@string/modes"
+            android:textColor="@color/Blanc"
             android:textSize="22sp">
 
         </TextView>
