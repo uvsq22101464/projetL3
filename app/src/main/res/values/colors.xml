@@ -10,4 +10,5 @@
     <color name="Cyan">#00FFFF</color>
     <color name="Magenta">#FF00FF</color>
     <color name="Blanc">#FFFFFF</color>
+    <color name="transparent">#00FFFFFF</color>
 </resources>
