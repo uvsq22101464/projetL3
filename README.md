@@ -21,6 +21,8 @@ L'application se compose de 6 différents volets permettant d'afficher les fonct
 -Une page de gestion lors du clic sur une salle depuis la page d'accueil. Cette page répertorie les capteurs présents ainsi que les données relatives à ces derniers, depuis cette page il est possible de contrôler les lumières, volets, les modes automatiques ainsi que les seuils servant aux modes automatiques comme la luminosité ou alors la température cible pour le chauffage.
 
 ![Screenshot_20240430_163612_Domot](https://github.com/uvsq22101464/projetL3/assets/91185466/5dab41b0-6dbf-4342-9290-610faa7eb040)
+![image_2024-04-30_171803190](https://github.com/uvsq22101464/projetL3/assets/91185466/3d3d8df0-272d-48e8-8706-da94bb076d2c)
+
 
 
 -Une page simplifiée qui répertorie tous les modes automatiques et permet de les contrôler depuis cette page.
