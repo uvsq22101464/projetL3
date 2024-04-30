@@ -34,6 +34,15 @@ L'application se compose de 6 différents volets permettant d'afficher les fonct
 
 ![Screenshot_20240430_163144_Domot](https://github.com/uvsq22101464/projetL3/assets/91185466/668a0e10-3b97-4bfa-9cf4-de22158af9e7)
 
+Fonctionnement et interfaces :
+
+La page d'accueil est composée de plusieurs boutons représentant les salles créées au préalable, ces boutons, une fois cliqués envoient vers une page de contrôle permettant de gérer l'activation ou la désactivation des différentes fonctionnalités comme allumer les lumières, fermer les volets... cette page de contrôle permet aussi de visualiser la température ou le taux d'humidité si les capteurs associés y ont été assignés. En cas d'erreur lors de la création de la salle il est possible de la supprimer ou bien alors de la modifier en changeant le nom ou en ajoutant de nouveaux capteurs.
+La page d'accueil dispose également d'un bouton permettant d'ajouter une nouvelle salle dans laquelle il est possible d'y renseigner un nom et les capteurs.
+L'application dispose également d'une visualisation graphique de la température dans un menu séparer ainsi qu'une page simplifier réunissant les modes automatiques de l'application, rangés par salles, il est donc possible de gérer les modes facilement qui ensuite déclencheront les actions sans avoir besoin d'intervenir.
+Afin de modifier les différents seuils servant au bon déroulement des modes automatiques, deux interfaces sont proposés, la première étant une barre permet d'augmenter ou de diminuer la luminosité tandis que l'interface permettant de changer la température du chauffage est un menu déroulant dans lequel le choix de la température est affiché.
+Les boutons contrôlant les actions pour allumer les lumières, activer un mode automatique sont des boutons ON/OFF offrant une utilisation simple.
+
+
 Fonctionnement détaillés :
 
 L'applicatation a été réalisée avec Android Studio ainsi que java pour gérer tout ce qui est gestion des données et l'affichage sur l'application est en XML, l'application utilise aussi la librairie MPAndroidChart par PhilJay (https://github.com/PhilJay/MPAndroidChart) afin d'afficher un graphique.
@@ -106,7 +115,7 @@ Code associé :
         });
         }
 ```
-Dans ce code on va se connecter à la base de données firebase avec "FirebaseDatabase.getInstance("lien de la base)" et la fonction "addOnCompleteListener" va permettre de récupérer les données, pour ce faire les données de firebase vont être converties en un arbre JSON, ensuite on va créér des boutons avec les noms des salles et lors du clic sur l'un d'eux on va récupérer les capteurs, leurs valeurs et lancer une nouvelle activité.
+Dans ce code on va se connecter à la base de données firebase avec "FirebaseDatabase.getInstance("lien de la base).getReference()" et la fonction "addOnCompleteListener" va permettre de récupérer les données, pour ce faire les données de firebase vont être converties en un arbre JSON répertoriant les différentes salles, leur noms ainsi que les capteurs et leur valeurs, ensuite on va créér des boutons avec les noms des salles et lors du clic sur l'un d'eux on va récupérer les capteurs, leurs valeurs et lancer une nouvelle activité.
 ```java
 Intent ia = new Intent(MainActivity.this, Manage_room.class);
 ia.putExtra("roomCaptor", roomCaptor);
@@ -135,7 +144,7 @@ database.addValueEventListener(new ValueEventListener() {
                                     break;
                                  // gère les différents cas
 ```
-Ici la fonction est appelé lors d'un changement dans la Realtime Database et en fonction de la valeur qui change va regarder le capteur concerné et afficher à l'utilisateur la modification.
+Ici la fonction est appelé à chaque fois qu'un changement dans la Realtime Database est détecté et en fonction de la valeur qui change on va regarder le capteur concerné et afficher à l'utilisateur la modification.
 Les boutons eux, quand ils sont cliqués vont regarder leur valeur dans la base de données avant de la changée, un exemple :
 ```java
 public void onClick(View v) {
@@ -158,7 +167,7 @@ public void onClick(View v) {
     });
 }
 ```
-Dans ce code, la lampe change de valeur et l'assigne dans la base de données avec "databaseRef.child("Action/Lampe").setValue(!value);"
+Dans ce code, on va se placer au niveau de Maison et le nom de la salle concerné pour pouvoir modifier les valeurs, ensuite on instancie la fonction ".addOnCompleteListener()" qui va regarder si le bon type valeur est présent et ainsi modifier la valeur actuel avec "databaseRef.child("Action/Lampe").setValue(!value);" Tout ce bout de code s'éxécute lors du clic sur le bouton.
 
 À quoi ressemble la création d'un menu :
 ```xml
@@ -196,4 +205,5 @@ Dans ce code, la lampe change de valeur et l'assigne dans la base de données av
     </include>
 </RelativeLayout>
 ```
-Dans cette section différents layouts sont créés afin de contenir des textes ou alors des graphiques.
+Dans cette section différents layouts sont créés afin de contenir des textes ou alors des graphiques, il est également possible de leur assigner une couleur, une dimension et de les placer.
+
