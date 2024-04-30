@@ -8,7 +8,7 @@ Comment se présente l'application :
 L'application se compose de 6 différents volets permettant d'afficher les fonctionnalités suivantes
 
 -Une page d'accueil répertoriant les salles crées dans la maison sous forme de boutons ainsi qu'un bouton ajouter permettant l'ajout d'un nouvelle salle.
-(Insérer capture d'écran accueil)
+![image](https://github.com/uvsq22101464/projetL3/assets/91185466/d0c60c34-6c54-46cd-ab3c-0e7009387443)
 
 -Une page de création de nouvelle salle dans laquelle il est possible de renseigné le nom de la salle voulu, et d'y ajouter les capteurs présents (1 seul exemplaire identique possible).
 (Insérer capture d'écran d'une création)
@@ -27,6 +27,7 @@ L'application se compose de 6 différents volets permettant d'afficher les fonct
 
 Fonctionnement détaillés :
 
+L'applicatation à été réalisée avec Android Studio ainsi que java pour gérer tout ce qui est gestion des données et l'affichage sur l'application est en xml, l'application utilise aussi la librairie MPAndroidChart par PhilJay (https://github.com/PhilJay/MPAndroidChart) afin d'afficher un graphique.
 Lorsque que l'application se lance, elle se connecte à internet et va récupérer les données situé dans la Realtime Database de firebase pour récupérer en particulier les noms des salles crées et les afficher sur l'écran d'accueil sous forme de bouton cliquable.
 Code associé :
   ```java
@@ -55,11 +56,10 @@ Code associé :
                                         String name = roomNames.next();
                                         listRoomNames.add(name);
                                         Log.d("firebase", name);
-                                        // on crée le textView et le bouton et on leur donne ce qu'ils contiennent
+                                        // on crée le bouton et on lui donne ce qu'il contient
                                         Button button = new Button(context);
                                         button.setText(name);
-                                        button.setGravity(Gravity.CENTER);
-                                        // on def le click du bouton
+                                        // on defini le clique du bouton
                                         button.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
@@ -87,14 +87,6 @@ Code associé :
                                                 startActivity(ia);
                                             }
                                         });
-                                        TableRow.LayoutParams parameter = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT);
-                                        button.setLayoutParams(parameter);
-                                        table = (TableRow) findViewById(R.id.table);
-                                        table.addView(button);
-                                        SharedPreferences storage = getSharedPreferences("data", Context.MODE_PRIVATE);
-                                        SharedPreferences.Editor modif_storage = storage.edit();
-                                        modif_storage.putString("listRoom", listRoomNames.toString().substring(1, listRoomNames.toString().length() - 1));
-                                        modif_storage.apply();
                                     }
                                 } catch (JSONException ignored) {}
                         }catch (JSONException e) {
@@ -105,7 +97,14 @@ Code associé :
         });
         }
 ```
-Dans ce code on va se connectée à la base de données firebase et la fonction "addOnCompleteListener" va permettre de récupérer les données, pour ce faire les données de firebase vont être converties en un arbre JSON, ensuite on va crée des boutons avec les noms des salles et lors du clique sur l'un d'eux on va récupérer les capteurs, leur valeurs et lancer une nouvelle activitée.
+Dans ce code on va se connectée à la base de données firebase avec "FirebaseDatabase.getInstance("lien de la base)" et la fonction "addOnCompleteListener" va permettre de récupérer les données, pour ce faire les données de firebase vont être converties en un arbre JSON, ensuite on va crée des boutons avec les noms des salles et lors du clique sur l'un d'eux on va récupérer les capteurs, leur valeurs et lancer une nouvelle activitée.
+```java
+Intent ia = new Intent(MainActivity.this, Manage_room.class);
+ia.putExtra("roomCaptor", roomCaptor);
+startActivity(ia);
+```
+cette partie permet de transmettre des valeurs qui on été récupéré depuis la page d'accueil vers la page suivant qui s'ouvrira lors du clique sur le bouton.
+
 
 La page ainsi lancée comprend une deuxième façon de récupérer les données et elle le fait dès qu'il y a un changement dans la base de données
 code associé :
@@ -127,7 +126,7 @@ database.addValueEventListener(new ValueEventListener() {
                                     break;
                                  // gère les différents cas
 ```
-Ici la fonction est appelé lors d'un changement dans la Realtime Database et en fonction de la valeur changer va regarder le capteur concerner et afficher à l'utilisateur la modification.
+Ici la fonction est appelé lors d'un changement dans la Realtime Database et en fonction de la valeur qui change va regarder le capteur concerné et afficher à l'utilisateur la modification.
 Les boutons eux, quand ils sont cliqués vont regarder leur valeur dans la base de données avant de la changée, un exemple :
 ```java
 public void onClick(View v) {
@@ -151,3 +150,41 @@ public void onClick(View v) {
 }
 ```
 Dans ce code la lampe change de valeur et l'assigne dans la base de donnée avec "databaseRef.child("Action/Lampe").setValue(!value);"
+
+A quoi ressemble la création d'un menu :
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_launcher_background"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/Blanc_transparent"
+            android:gravity="center"
+            android:text="@string/temperature"
+            android:textColor="@color/Blanc"
+            android:textSize="22sp">
+        </TextView>
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/lineChart"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:layout_margin="10dp"
+            android:background="#A6000000">
+        </com.github.mikephil.charting.charts.LineChart>
+    </LinearLayout>
+    <include
+    layout="@layout/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true">
+    </include>
+</RelativeLayout>
+```
+Dans cette section différent layouts sont crée afin de contenir des textes ou alors des graphiques.
