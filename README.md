@@ -8,22 +8,23 @@ Comment se présente l'application :
 L'application se compose de 6 différents volets permettant d'afficher les fonctionnalités suivantes
 
 -Une page d'accueil répertoriant les salles crées dans la maison sous forme de boutons ainsi qu'un bouton ajouter permettant l'ajout d'un nouvelle salle.
-![image](https://github.com/uvsq22101464/projetL3/assets/91185466/d0c60c34-6c54-46cd-ab3c-0e7009387443)
+![Screenshot_20240430_163126_Domotix](https://github.com/uvsq22101464/projetL3/assets/91185466/a962f757-3094-4c2b-8625-5a53f8b0e024)
 
 -Une page de création de nouvelle salle dans laquelle il est possible de renseigné le nom de la salle voulu, et d'y ajouter les capteurs présents (1 seul exemplaire identique possible).
-(Insérer capture d'écran d'une création)
+![Screenshot_20240430_163224_Domotix](https://github.com/uvsq22101464/projetL3/assets/91185466/e7d310bd-32c5-4e12-8b2a-214a5ecd69f0)
+
 
 -Une page de modification quand on clique sur une des salles de la page d'accueil puis sur modifier qui permet de renommée la salle ou d'y ajouter de nouveaux capteurs.
 (Insérer capture d'écran d'une modification)
 
 -Une page de gestion lors du clique sur une salle depuis la page d'accueil. Cette page répertorie les capteurs présent ainsi que les données relatives à ces derniers, depuis cette page il est possible de contrôler les lumières, volets, les modes automatiques ainsi que les seuils servant aux modes automatiques comme la luminosité ou alors la température cible pour le chauffage.
-(Insérer capture d'écran de plusieurs gestions)
+![Screenshot_20240430_163612_Domotix](https://github.com/uvsq22101464/projetL3/assets/91185466/e9057048-e9eb-4f38-97cf-806d0372201b)
 
 -Une page simplifier qui répertorie tous les modes automatiques et permet de les contrôler depuis cette page.
 (Insérer capture d'écran de la page mode)
 
 -Une page affichant un graphique avec les températures enregistrées.
-(Insérer capture d'écran du graphique des températures)
+![Screenshot_20240430_163144_Domotix](https://github.com/uvsq22101464/projetL3/assets/91185466/7d02ddbf-f0bc-4d36-921c-330a96d29e27)
 
 Fonctionnement détaillés :
 
