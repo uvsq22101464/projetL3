@@ -41,6 +41,7 @@ public class ModeManager extends AppCompatActivity {
                         TextView title = new TextView(context);
                         title.setText(name);
                         title.setTextSize(15);
+                        title.setTextColor(getResources().getColor(R.color.Blanc));
                         TableRow titleRow = new TableRow(context);
                         titleRow.addView(title);
                         table.addView(titleRow);
@@ -77,6 +78,7 @@ public class ModeManager extends AppCompatActivity {
                         TextView text = new TextView(context);
                         text.setText(mode);
                         text.setTextSize(15);
+                        text.setTextColor(getResources().getColor(R.color.Blanc));
                         rowText.addView(text);
                         rowButton.addView(button);
                     }
