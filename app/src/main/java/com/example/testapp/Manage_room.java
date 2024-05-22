@@ -167,6 +167,7 @@ public class Manage_room extends AppCompatActivity {
                                     } else {
                                         textAlarm.setText("Pas de flamme détectée");
                                     }
+                                    textAlarm.setTextColor(getResources().getColor(R.color.Blanc));
                                     break;
                                 case "Volet":
                                     ToggleButton buttonV = findViewById(R.id.voletValue);
@@ -179,6 +180,7 @@ public class Manage_room extends AppCompatActivity {
                                 case "Température":
                                     TextView textTemp = findViewById(R.id.temperatureValue);
                                     textTemp.setText("Température actuelle : " + value + " °C");
+                                    textTemp.setTextColor(getResources().getColor(R.color.Blanc));
                                     break;
                                 case "Chauffage":
                                     ToggleButton heater = findViewById(R.id.buttonHeater);
@@ -195,6 +197,7 @@ public class Manage_room extends AppCompatActivity {
                                 case "Humidité":
                                     TextView humidite = findViewById(R.id.humiditeText);
                                     humidite.setText(getString(R.string.humidite) + value.toString() + "%");
+                                    humidite.setTextColor(getResources().getColor(R.color.Blanc));
                                     break;
                             }
                         }
@@ -474,6 +477,7 @@ public class Manage_room extends AppCompatActivity {
                     DatabaseReference light = database.getReference().child("Seuil Luminosité");
                     TextView displayValue = new TextView(context);
                     displayValue.setTextSize(15);
+                    displayValue.setTextColor(getResources().getColor(R.color.Blanc));
                     light.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -561,6 +565,7 @@ public class Manage_room extends AppCompatActivity {
                     heater.setMinValue(0);
                     heater.setMaxValue(40);
                     heater.setWrapSelectorWheel(false);
+                    heater.setTextColor(getResources().getColor(R.color.Blanc));
                     DatabaseReference heat = database.getReference().child("Seuil Température");
                     heat.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
