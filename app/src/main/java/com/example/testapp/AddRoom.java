@@ -86,8 +86,8 @@ public class AddRoom extends AppCompatActivity {
                             myRef.child("Action/" + captor).setValue(false);
                             myRef.child("Détection/Compteur").setValue(0);
                             break;
-                        case "Détecteur d'humidité":
-                            myRef.child("Détection/Détecteur d'humidité").setValue(0);
+                        case "Humidité":
+                            myRef.child("Détection/Humidité").setValue(0);
                             break;
                     }
                 }

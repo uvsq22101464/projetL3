@@ -192,9 +192,9 @@ public class Manage_room extends AppCompatActivity {
                                     ToggleButton door = findViewById(R.id.door);
                                     door.setChecked((boolean) value);
                                     break;
-                                case "Détecteur d'humidité":
+                                case "Humidité":
                                     TextView humidite = findViewById(R.id.humiditeText);
-                                    humidite.setText(getString(R.string.humidite) + value.toString());
+                                    humidite.setText(getString(R.string.humidite) + value.toString() + "%");
                                     break;
                             }
                         }
@@ -729,10 +729,10 @@ public class Manage_room extends AppCompatActivity {
                     });
                     table.addView(door);
                     break;
-                case "Détecteur d'humidité":
+                case "Humidité":
                     TextView humidite = new TextView(context);
                     humidite.setId(R.id.humiditeText);
-                    DatabaseReference humiditeRef = database.getReference("Maison/" + name + "/Détection/Détecteur d'humidité");
+                    DatabaseReference humiditeRef = database.getReference("Maison/" + name + "/Détection/Humidité");
                     humiditeRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
